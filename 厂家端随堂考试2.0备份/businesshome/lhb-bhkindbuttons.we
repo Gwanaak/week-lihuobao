@@ -1,0 +1,49 @@
+<template>
+ <div>
+	  <div class="kind" style="flex-direction:row;">
+       <lhb-hbbutton class="smallkind" iconurl="{{btn.iconurl}}" icontitle="{{btn.icontitle}}" btnnumber="{{btn.number}}" repeat="{{btn in buttons}}" btnwidth="{{btn.width}}"></lhb-hbbutton>
+    </div>
+    <div class="line" style="flex-direction:row;">
+      <text></text>
+    </div>
+ </div>   
+</template>
+
+<style>
+	.kind{
+    flex-direction: row;
+    width: 750;
+  }
+  .smallkind{
+    flex:1; 
+    margin-top:16;
+  }
+  .line{
+    margin-top: 15;
+    width: 750;
+    height: 10;
+    background-color: rgb(237,237,237);
+  }
+</style>
+
+<script>
+
+	require("./lhb-hbbutton.we");
+
+  
+
+    module.exports={
+        data:{
+            buttons:[
+              {iconurl:'http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/buiness_suitangexam.png',icontitle:'随堂考试',number:3,width:80},
+              {iconurl:'http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/buiness_lihuo_log@2x.png',icontitle:'拍一拍',number:0,width:80},
+              {iconurl:'http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/buiness_sharpiao_log@2x.png',icontitle:'做调研',number:1,width:100},
+              {iconurl:'http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/buiness_popbtn.png',icontitle:'POP比赛',number:2,width:80}
+            ]
+        }
+        
+
+     
+
+    }
+</script>

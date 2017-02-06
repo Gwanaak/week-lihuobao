@@ -1,0 +1,300 @@
+<template>
+	<div style="flex-direction:column;">
+    <div class="item">
+        <image class="thumb" src="{{geticonUrl(row.task_id)}}"></image>
+        <div class="titlemodule" style="flex-direction:column;margin-left:20;margin-top:5;">
+          <text class="title">{{row.name}}</text>
+          <div style="flex-direction:row;align-items:center;">
+             <image src="http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/brandtype_icon.png" style="width: 30;height:30;margin-top: 8;"></image>
+             <text class="type">{{getType(row.categorylevel2_id)}}</text>
+             <text class="type" style="margin-left:30;">{{getremainstr(row.remain,row.participants)}}</text>
+          </div>
+          <div class="button" style="flex-direction:row;align-items:center;width:510;margin-top: 35;">
+            <text style="font-size:30;color:red;font-weight: bold;width:200;">{{getMoney(row.tiptype_id,row.tip,row.score,row.src_container_id)}}</text>
+            <text class="buttontitle" style="border-color:rgb(248,207,52);color:rgb(248,207,52);margin-left:10;" if="{{getisShow(row.categorylevel1_id,row.listtag,row.categorylevel2_id)}}" onclick="clickleftbutton(row)">{{getleftBtn(row.categorylevel1_id,row.listtag)}}</text>
+            <text class="buttontitle" style="border-color:{{getrightBtncolor(row.status,row.categorylevel2_id)}};color:{{getrightBtncolor(row.status,row.categorylevel2_id)}};margin-left:{{getLeftMargin(row.categorylevel1_id,row.listtag,row.categorylevel2_id)}};">{{getrightBtn(row.status,row.categorylevel1_id,row.categorylevel2_id)}}</text>
+          </div>  
+        </div>
+    </div>
+    <div class="item2" style="margin-top:10;height:1;flex-direction:row;background-color:rgb(237,237,237);align-items:center;"></div>
+   </div>
+</template>
+
+<style>
+  .item { margin-top: 20; margin-left: 10; flex-direction: row; }
+  .thumb { width: 200; height: 200;border-width:1;border-color:#e3e3e3;}
+  .title {text-align: left; color: #666666; font-size: 35;width: 510;text-overflow:ellipsis;lines:1;}
+  .type{
+    margin-top: 8;
+    /*border-width: 1;*/
+    /*border-radius: 10;*/
+    /*border-color: grey;*/
+    color: grey;
+    font-size: 26;
+    text-align: center;
+    padding: 8;
+    max-width: 190;
+  }
+  .buttontitle{
+    height:60;
+    width:130;
+    font-size:28;
+    text-align:center;
+    border-radius:8;
+    border-width:3;
+    justify-content:center;
+    padding: 13;
+  }
+  .participate{
+    flex:1;
+    text-align:center;
+    font-size:24;
+    color: #666666;
+  }
+</style>
+
+<script>
+  var eventModule = require('@weex-module/requestevent'); 
+  var clickModule = require('@weex-module/didclickevent');
+
+  //var iconimageurl='http://oss.aliyuncs.com/testossimg/image/task_list_thumb/';//答题图片前缀
+  //var iconimageurl='http://oss.aliyuncs.com/exposs/image/task_list_thumb/';
+  //var iconimageurl='http://oss.aliyuncs.com/mingstatic/image/task_list_thumb/';
+
+  var tipunitstr='金币';
+  var typemap={
+
+      1005:'产品培训',
+      1006:'市场调研',
+      1007:'勤分享',
+      1008:'勤分享',
+      1009:'做调研',
+      1010:'常规调研',
+
+      1311:'疗程用药调研',
+      1312:'联合用药调研',
+      1313:'进货单调研',
+      1314:'保修卡调研',
+
+      1211:'产品知识',
+      1212:'养生常识',
+      1213:'行业资讯',
+      1214:'销售技能',
+      1215:'职场须知',
+
+      110:'与产品合拍',
+      1111:'拍摄货架',
+      1112:'拍摄堆头',
+      1113:'拍摄POP',
+      1114:'拍摄端架',
+      1115:'拍摄橱窗',
+      1116:'拍摄海报',
+      1117:'拍摄价签',
+      1118:'与产品合拍',
+      1119:'拍摄POP',
+      1120:'摄影大赛',
+
+      1217:'知识竞赛',
+      1711:'营业执照验证',
+      1712:'小票验证',
+      1713:'名片验证',
+      1411:'其他',
+      1511:'疾病培训',
+      1611:'随堂考试'
+
+
+  };
+  var rightbuttonstatus={
+     
+      0:'抢钱',
+      1:'继续',
+      2:'审核',
+      3:'已完成',
+      4:'未通过',
+      5:'结束',
+      7:'结束',
+      8:'结束',
+      9:'结束',
+      10:'结束',
+      11:'结束',
+      12:'结束',
+      13:'结束',
+      14:'结束'
+  };
+	module.exports={
+        data:{
+          environment:'',
+          row:{},
+          branddict:{}
+        },
+        ready:function(){
+
+          var self = this;
+          eventModule.getBrandMessage(function(ret){ 
+
+                self.branddict = ret;
+                //nativeLog("ret:+++++++++++"+self.branddict);
+           });
+        },
+
+        methods:{
+             
+             getremainstr:function(remain,participants){
+                 var remainstr='';
+                 if (remain==0) {
+                     remainstr='参与：'+participants;
+                 }else{
+                     remainstr='仅剩：'+remain;
+                 }
+                 return remainstr;
+
+             },
+             geticonUrl:function(tid){
+
+                 return 'http://oss.aliyuncs.com/'+this.environment+'/image/task_list_thumb/' + tid;
+             },
+             getMoney:function(tiptype,tip,score,containerid){
+                  
+                 var brandstr=this.branddict[containerid];
+                 if (brandstr == undefined) {
+                     brandstr='积分';
+                 }
+
+
+                 var tipstr=''; 
+
+                 if (tip==0) {
+                  tipstr=score+brandstr;
+                 }else{
+
+                  if (tiptype==2) {
+                     tipstr='赏' + tip/100.0 + tipunitstr;
+                  }else{
+                     tipstr='赏' + tip/100.0 + '元';
+                  }
+                  
+                 }
+
+                 if (tip==0 && score==0) {
+                  tipstr='赏金 ***';
+                 }
+                 return tipstr;
+             },
+             getType:function(type){
+                var typestr=typemap[type];
+                if (typestr) {
+                  return typemap[type];
+                }else{
+                  return '其他';
+                }
+                
+             },
+             getrightBtn:function(status,kind,type){
+                var statusstr='';
+                
+                statusstr=rightbuttonstatus[status];
+
+                if (kind==2) {
+                  if (status==0 || status==1) {
+                    statusstr='抢答';
+                  }
+                }
+          
+
+                if (type==120) {
+                  if (status==0 || status==1) {
+                    statusstr='抢钱';
+                  }else{
+                    statusstr='围观';
+                  }
+                }
+
+                return statusstr;
+             },
+             getrightBtncolor:function(status,type){
+
+                var color='';
+                if (status==0 || status==1) {
+                  color='orange';
+                }else{
+                  color='lightgrey';
+                }
+                if (type==120) {
+                  color='orange';
+                }
+                
+                return color;
+             },
+             getleftBtn:function(kind,listtag){
+                 var leftbtnstr='';
+                 if (kind==1 || kind==11) {
+                    if (listtag==3) {
+                        leftbtnstr='明细';
+                    }else{
+                        leftbtnstr='围观';
+                    }
+                 }else if (kind==2){
+                      leftbtnstr='学习';
+                 }else{}
+
+                 return leftbtnstr;
+             },
+             getisShow:function(kind,listtag,type){
+                var show=false;
+                if (kind==1 || kind==11) {
+                      if (listtag==0) {
+                          show=false;
+                      }else if (listtag==3) {
+                          show=true;
+                      }else{
+                          show=true;
+                      }
+                }else if (kind==2){
+                          show=true;
+                }else{
+                       show=false;
+                   }
+
+                if (type==120) {
+                    show=false;
+                }   
+                return show;   
+             },
+
+             getLeftMargin:function(kind,listtag,type){
+
+                var padding=165;
+                var leftmargin=25;
+                if (kind==1 || kind==11) {
+                      if (listtag==0) {
+                          leftmargin=padding;
+                      }else if (listtag==3) {
+                          
+                      }else{
+                          
+                      }
+                }else if (kind==2){
+                          
+                }else{
+                       leftmargin=padding;
+                   }
+
+                if (type==120) {
+                    leftmargin=padding;
+                }   
+                return leftmargin; 
+             },
+
+             clickleftbutton:function(e){
+
+              clickModule.didClickLeftButton(e);
+
+             }
+
+
+        },
+
+     
+
+    }
+</script>

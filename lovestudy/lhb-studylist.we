@@ -1,0 +1,141 @@
+<template>
+<div style="background-color:white;width:750;">
+ <list class="list">
+  <refresh  class="refresh" onRefresh="handleRefresh" display="{{displayRefresh}}">
+        <loading-indicator style="width:100;height:100;color:grey;"></loading-indicator>
+        <text style="margin-left:0;color:black;">{{refreshstr}}</text>
+  </refresh>
+  <cell onappear="onappear" ondisappear="ondisappear" class="cell" repeat="{{row in rows}}" onclick="clcikmanagecell(row)">
+    <lhb-studycell row="{{row}}" if="{{row.categorylevel1_id!=15&&row.categorylevel2_id!=1217}}" environment="{{environment}}" scorename="{{scorename}}"></lhb-studycell>
+    <lhb-studykonwledgecell row="{{row}}" if="{{row.categorylevel1_id==2&&row.categorylevel2_id==1217}}" environment="{{environment}}"></lhb-studykonwledgecell>
+  </cell>
+  <cell>
+    <text style="font-size:{{size}};color:lightgrey;text-align:center;">非指定店员仅展示部分活动</text>
+  </cell>
+  </list>
+ </div> 
+</template>
+<style>
+  .cell{
+    width: 750;
+  }
+  .refresh {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction:row;
+    width:750;
+    height:60;
+  }
+  .type{
+    
+    margin-top: 8;
+    border-width: 1;
+    border-radius: 10;
+    border-color: grey;
+    color: grey;
+    font-size: 24;
+    text-align: center;
+    padding: 8;
+    height: 100;
+  }
+</style>
+<script>
+
+  var eventModule = require('@weex-module/requestevent'); 
+  var clickModule = require('@weex-module/didclickevent');
+  var stream = require('@weex-module/stream');
+
+  require("./lhb-studycell.we");
+  require("./lhb-studykonwledgecell.we");
+
+  module.exports = {
+      created: function() {
+          var bundleUrl = this.$getConfig().bundleUrl;
+          // console.log('hit', bundleUrl);
+          var sortstr=this.getQueryString(bundleUrl,'sort');
+          var categorylevel1_idstr=this.getQueryString(bundleUrl,'categorylevel1_id');
+          this.sort=sortstr;
+          this.categorylevel1_id=categorylevel1_idstr;
+          // nativeLog("sort:--------"+sortstr+this.titlestr+bundleUrl);
+         
+          this.requestListDatas(sortstr,categorylevel1_idstr);
+      },
+
+      ready:function(){
+
+          //this.requestHomeDatas();
+      },
+      
+      data: {
+        rows:[],
+        displayRefresh: 'show',
+        refreshstr:'下拉刷新',
+        titlestr:'',
+        environment:'',
+        sort:'',
+        categorylevel1_id:''
+        },
+
+      methods: {
+          requestListDatas:function(sort,categorylevel1_id){
+
+               var self = this;
+               eventModule.getFourKindBaseInfo(function(ret){ 
+
+                //nativeLog("ret:--------"+ret.uid+ret.sid+ret._t);
+                self.environment=ret.environment;
+                var GET_URL_List = ret.list_url;
+                var BODY_URL='user_id='+ret.uid+'&sid='+ret.sid+'&_t='+ret._t+'&platform_id='+ret.platform+'&version='+ret.version+'&container_id='+ret.container_id+'&sorts='+sort+'&categorylevel1_id='+categorylevel1_id;
+
+                stream.fetch({
+                  method: 'POST',
+                  url: GET_URL_List,
+                  body:BODY_URL,
+                  type:'json'
+                }, function(ret) {
+                  if(!ret.ok){
+                    //self.test = "request failed";
+                  }else{
+                    //console.log('get:'+JSON.stringify(ret.data));
+                    var dic =ret.data;
+                    //self.test='get:'+JSON.stringify(ret.data);
+
+                    self.rows= dic[sort];
+
+                    self.displayRefresh = 'hide';
+                    self.refreshstr='下拉刷新';
+                  }
+                },function(response){
+                  //console.log('get in progress:'+response.length);
+                  //self.test = "request failed";
+                });
+
+                  });
+             },
+
+             getQueryString:function(url,name){
+
+                   var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+                   var r = url.split("?")[1].match(reg);
+                   if(r!=null) return unescape(r[2]); return null;
+             },
+
+            handleRefresh: function (e) {
+               var self = this;
+               self.displayRefresh = 'show';
+               self.refreshstr='正在刷新';
+               
+               self.requestListDatas(this.sort,this.categorylevel1_id);
+
+            },
+            clcikmanagecell:function(e){
+             
+             clickModule.didClickManageCell(e);
+
+         }
+
+          }
+   }
+
+</script>

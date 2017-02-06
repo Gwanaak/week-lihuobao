@@ -1,0 +1,95 @@
+<template>
+  <div class="otherkind" style="flex-direction:row;">
+      <div class="otherkindborder" repeat="{{btn in buttons}}" style="width:{{getnumber(buttons)}}">
+       <brand-button class="othersmallkind" iconurl="{{getbtnImgurl(btn.image_id)}}" icontitle="{{btn.name}}" btndict="{{btn}}" btnradius="1" btnwidth="110" titlecolor="{{btn.color}}"></brand-button>
+      </div>
+  </div>
+</template>
+
+<style>
+  .otherkind{
+    flex-direction: row;
+    width: 750;
+    flex-wrap:wrap;
+    border-bottom-width: 8;
+    border-color: rgb(237,237,237);
+  }
+  .otherkindborder{
+    /*flex:1; */
+    flex-direction:column;
+    padding-bottom: 16;
+    /*border-width: 0.8;*/
+    /*border-bottom-width: 8;*/
+    /*border-top-width: 0;*/
+    /*border-color: rgb(237,237,237);*/
+  }
+  .othersmallkind{
+    flex:1; 
+    margin-top:8;
+  }
+</style>
+
+<script>
+  require("./brand-button.we");
+  var eventModule = require('@weex-module/sentdataevent'); 
+  var stream = require('@weex-module/stream');
+ 
+  //var btnimgurl='http://oss.aliyuncs.com/testossimg/banner_task/image/';
+  //var btnimgurl='http://oss.aliyuncs.com/exposs/banner_task/image/';
+  //var btnimgurl='http://oss.aliyuncs.com/mingstatic/banner_task/image/';
+
+    module.exports={
+        data:{
+          environment:'',
+            buttons:[]
+        },
+        ready:function(){
+        var self = this;
+        eventModule.sentHomeDatasWithWeex(function(ret){ 
+
+          self.environment=ret.environment;
+          //var GET_URL_ActivityEntry = 'http://1525sg4410.51mypc.cn/mingop.php?m=activityEntry';//开发环境
+          //var GET_URL_ActivityEntry = 'http://xiaomingtiyan.imwork.net/mingop.php?m=activityEntry';//体验环境
+          //var GET_URL_ActivityEntry = 'http://ming.lihuobao.cn/mingop.php?m=activityEntry';//正式环境
+          //var version = '133';
+          var GET_URL_ActivityEntry = ret.activity_url;
+          var BODY_URL='user_id='+ret.uid+'&sid='+ret.sid+'&_t='+ret._t+'&platform_id='+ret.platform+'&version='+ret.version+'&container_id='+ret.container_id;
+
+          stream.fetch({
+            method: 'POST',
+            url: GET_URL_ActivityEntry,
+            body:BODY_URL,
+            type:'json'
+          }, function(ret) {
+            if(!ret.ok){
+              
+            }else{
+              
+              var dic = ret.data;
+              self.buttons=dic.list;
+              
+            }
+          },function(response){
+            
+          });
+          });
+      },
+      methods:{
+             
+             getbtnImgurl:function(image){
+                return 'http://oss.aliyuncs.com/'+this.environment+'/banner_task/image/'+image;
+             },
+             getnumber:function(buttons){
+             
+               if (buttons.length<4) {
+                return 250;
+               }else{
+                return 187.5;
+               }
+             
+             }
+             
+     }
+
+    }
+</script>

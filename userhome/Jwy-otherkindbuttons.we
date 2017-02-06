@@ -1,0 +1,83 @@
+<template>
+	<div class="otherkind" style="flex-direction:row;">
+      <div class="otherkindborder" repeat="{{btn in buttons}}">
+       <jwy-otherbutton class="othersmallkind" iconurl="{{getbtnImgurl(btn.image_id)}}" icontitle="{{btn.name}}" btndict="{{btn}}" btnradius="1" btnwidth="110" titlecolor="{{btn.color}}"></jwy-otherbutton>
+      </div>
+    </div>
+</template>
+
+<style>
+  .otherkind{
+    flex-direction: row;
+    width: 750;
+  }
+  .otherkindborder{
+  	flex:1; 
+    flex-direction:column;
+    padding-bottom: 16;
+    border-width: 0.8;
+    border-bottom-width: 8;
+    border-top-width: 0;
+    border-color: rgb(237,237,237);
+  }
+  .othersmallkind{
+    flex:1; 
+    margin-top:6;
+  }
+</style>
+
+<script>
+	require("./jwy-otherbutton.we");
+  var eventModule = require('@weex-module/requestevent'); 
+  var stream = require('@weex-module/stream');
+ 
+  //var btnimgurl='http://oss.aliyuncs.com/testossimg/banner_task/image/';
+  //var btnimgurl='http://oss.aliyuncs.com/exposs/banner_task/image/';
+  //var btnimgurl='http://oss.aliyuncs.com/mingstatic/banner_task/image/';
+
+    module.exports={
+        data:{
+          environment:'',
+            buttons:[]
+        },
+        ready:function(){
+        var self = this;
+        eventModule.getHomeDatas(function(ret){ 
+
+          //var GET_URL_ActivityEntry = 'http://1525sg4410.51mypc.cn/mingop.php?m=activityEntry';//开发环境
+          //var GET_URL_ActivityEntry = 'http://xiaomingtiyan.imwork.net/mingop.php?m=activityEntry';//体验环境
+          //var GET_URL_ActivityEntry = 'http://ming.lihuobao.cn/mingop.php?m=activityEntry';//正式环境
+          //var version = '133';
+          self.environment=ret.environment;
+          var GET_URL_ActivityEntry = ret.activity_url;
+          var BODY_URL='user_id='+ret.uid+'&sid='+ret.sid+'&_t='+ret._t+'&platform_id='+ret.platform+'&version='+ret.version+'&container_id='+ret.container_id;
+
+          stream.fetch({
+            method: 'POST',
+            url: GET_URL_ActivityEntry,
+            body:BODY_URL,
+            type:'json'
+          }, function(ret) {
+            if(!ret.ok){
+              
+            }else{
+              
+              var dic = ret.data;
+              self.buttons=dic.list;
+              
+            }
+          },function(response){
+            
+          });
+          });
+      },
+      methods:{
+             
+             getbtnImgurl:function(image){
+                return 'http://oss.aliyuncs.com/'+this.environment+'/banner_task/image/'+image;
+             }
+             
+     }
+
+    }
+</script>

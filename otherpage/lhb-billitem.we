@@ -1,0 +1,63 @@
+<template>
+    <div class="container"  onclick="onclickitem">
+        <!-- <image class="tab-icon" src = {{icon}}></image> -->
+        <img src={{icon}} style="width:300;height: 70;">
+        <text class="tab-text" style="color: {{titleColor}};">{{title}}</text>
+        <!-- <image class="top-line" src = "http://gtms03.alicdn.com/tps/i3/TB1mdsiMpXXXXXpXXXXNw4JIXXX-640-4.png"></image> -->
+    </div>  
+</template>
+
+<style>
+    .container {
+        flex: 1; 
+        flex-direction: column; 
+        align-items:center; 
+        justify-content:center; 
+        height: 70;
+    }
+    .top-line {
+        position: absolute; 
+        bottom:2; 
+        left: 0; 
+        right: 0; 
+        height: 2;
+    }
+    .tab-icon {
+        margin-top: 0; 
+        width: 70; 
+        height: 70;
+    }
+    .tab-text {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        margin-top: 18; 
+        text-align: center;  
+        font-size: 32;
+        font-weight: bold;
+    }
+</style>
+
+<script>
+    module.exports = {
+        data: {
+          index: 0,
+          title: '',
+          titleColor: 'grey',
+          icon: '',
+          backgroundColor: '#ffffff'
+          //backgroundImage:'http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/bg_tab_billing.png'
+        },
+        methods: {
+          onclickitem: function (e) {
+            var vm = this;
+            var params = {
+              index: vm.index
+            };
+            vm.$dispatch('tabItem.onClick', params);
+          }
+        }
+    }
+</script>

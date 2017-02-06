@@ -1,0 +1,31 @@
+<template>
+	<div style="flex-direction:row;">
+		<img style="width:26;height:26;margin-left:5;"src="{{imgurl}}" repeat="{{getImgurlNums(num)}}"></img>
+	</div>
+</template>
+
+<script>
+	module.exports={
+      data:{
+        num:5
+     },
+     methods:{
+             
+             getImgurlNums:function(num){
+                var intnum=parseInt(num/10);
+                if (intnum%2!=0) {
+                    intnum=intnum+1;
+                }
+                var nums=[];
+                for (var i = 0; i < 5; i++) {
+                	if (i<intnum/2) {
+                		nums.push({imgurl:'http://testossimg.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/yellowStar.png'});
+                	}else{
+                		nums.push({imgurl:'http://testossimg.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/grayStar.png'});
+                	}
+                   }
+                 return nums;  
+             }
+    }         
+  }
+</script>

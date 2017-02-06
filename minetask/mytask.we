@@ -1,0 +1,191 @@
+<template>
+  <div>
+	<div style="flex-direction:row;">
+       <div class="grabview" style="border-color:rgb(239,135,50);">
+       	 <text class="grabtext">抢单数</text>
+       	 <text class="grabtext">{{getpass(row.task_capture)}}</text>
+       </div>
+       <div class="grabview" style="border-color:rgb(247,206,70);">
+       	 <text class="grabtext">成功率</text>
+       	 <text class="grabtext">{{getpassrate(row.task_capture,row.task_pass)}}</text>
+       </div>
+	</div>
+	<text style="background-color:rgb(235,235,235);height:66;text-align:center;padding-top:15;color:rgb(85,85,85);">我的任务</text>
+	<div style="background-color:red;"></div>
+	<div class="wrapper">
+        <div class="tabbar" append = "tree">
+            <item repeat={{tabItems}} index={{index}} title={{title}} title-color={{titleColor}}></item>
+        </div>
+        <embed class="content" style="visibility:{{visibility}}" repeat={{tabItems}} src={{src}} type="weex"></embed>
+   </div>
+  </div>	
+</template>
+<style>
+	.grabview{
+    align-items:center;
+		flex-direction:column;
+		margin-top:8;
+		border-bottom-width:4;
+		flex:1;
+    }
+    .grabtext{
+    	color:grey;
+    	size:28;
+    	padding-bottom:8;
+    }
+    .wrapper { 
+        width: 750; 
+        position: absolute; 
+        top: 174; 
+        left: 0; 
+        right: 0; 
+        bottom: 0;
+    }
+    .content { 
+        position: fixed; 
+        top: 244; 
+        left: 0; 
+        right: 0; 
+        bottom: 0; 
+        /*margin-top: 403;  */
+        margin-bottom: 0;
+        background-color: white;
+    }
+    .tabbar { 
+        flex-direction: row; 
+        position: fixed; 
+        top: 174; 
+        left: 0; 
+        right: 0;  
+        height: 70;
+    }
+</style>
+<script>
+	require("./item.we");
+	var eventModule = require('@weex-module/requestevent'); 
+    var stream = require('@weex-module/stream');
+
+    module.exports = {
+        data: {
+          row:{},	
+          tabItems: [
+                    { index: 0,
+                      title: '待完成',
+                      titleColor: 'grey',
+                      visibility: 'visible',
+                      selectedColor:'red',
+                      src:'http://exposs.oss-cn-hangzhou.aliyuncs.com/weex/ios/JS_138/mytasklist.js?sort=getUserTaskDoing'
+                    },
+
+                     { index: 1,
+                      title: '待审核',
+                      titleColor: 'grey',
+                      visibility: 'hidden',
+                      selectedColor:'red',
+                      src:'http://exposs.oss-cn-hangzhou.aliyuncs.com/weex/ios/JS_138/mytasklist.js?sort=getUserTaskExamining'
+                     },
+
+                    { index: 2,
+                      title: '已通过',
+                      titleColor: 'grey',
+                      visibility: 'hidden',
+                      selectedColor:'red',
+                      src:'http://exposs.oss-cn-hangzhou.aliyuncs.com/weex/ios/JS_138/mytasklist.js?sort=getUserTaskPass'
+                     },
+
+                    { index: 3,
+                      title: '未通过',
+                      titleColor: 'grey',
+                      visibility: 'hidden',
+                      selectedColor:'red',
+                      src:'http://exposs.oss-cn-hangzhou.aliyuncs.com/weex/ios/JS_138/mytasklist.js?sort=getUserTaskUnpass'
+                     },
+
+                     ],
+          selectedIndex: 0,
+          selectedColor: 'red',
+          unselectedColor: 'grey',
+        },
+        created: function () {
+          this.selected(this.selectedIndex);
+
+          this.$on('tabItem.onClick',function(e){
+            var detail= e.detail;
+            this.selectedIndex = detail.index;
+            this.selected(detail.index);
+
+            var params = {
+              index: detail.index
+            };
+            // this.$dispatch('tabBar.onClick', params);
+          });
+
+          this.getlistrequest();
+        },
+        methods: {
+            selected: function(index) {
+              for(var i = 0; i < this.tabItems.length; i++) {
+                var tabItem = this.tabItems[i];
+                if(i == index){
+                  tabItem.titleColor = tabItem.selectedColor;
+                  tabItem.visibility = 'visible';
+                }
+                else {
+                  tabItem.titleColor = this.unselectedColor;
+                  tabItem.visibility = 'hidden';
+                }
+              }
+            },  
+            getlistrequest:function(){
+
+               var self = this;
+               eventModule.getHomeDatas(function(ret){ 
+
+                //nativeLog("ret:--------"+ret.uid+ret.sid+ret._t);
+                var GET_URL_List = ret.main_url+'getUserTaskInfo';
+                var BODY_URL='user_id='+ret.uid+'&sid='+ret.sid+'&_t='+ret._t+'&platform_id='+ret.platform+'&version='+ret.version+'&container_id='+ret.container_id;
+
+                stream.fetch({
+                  method: 'POST',
+                  url: GET_URL_List,
+                  body:BODY_URL,
+                  type:'json'
+                }, function(ret) {
+                  if(!ret.ok){
+                 
+                  }else{
+                    
+                    var dic=ret.data;
+                    self.row=dic;
+                    
+                  }
+                },function(response){
+                  
+                });
+
+                  });
+             },
+
+            getpass:function(task_capture){
+            	if (task_capture==0) {
+            		return '0';
+            	}else{
+            		return task_capture;
+            	}
+            },
+            getpassrate:function(task_capture,task_pass){
+            	if (task_capture==0) {
+            		return '0%';
+            	}else{
+            		var rate=task_pass*100/task_capture;
+                var rateint=parseInt(rate);
+                var cha=rate-rateint;
+                if (cha>=0.5) {
+                  rateint=rateint+1;
+                }
+            		return rateint+'%';
+            	}
+            }
+        }
+    }
+</script>

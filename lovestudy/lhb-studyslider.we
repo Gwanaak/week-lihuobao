@@ -1,0 +1,97 @@
+<template>
+  <slider class="slider" auto-play="{{autoplay}}">
+    <div class="slider-pages" repeat="{{row in items}}">
+      <image class="image" src='{{getbannerimage(row.image)}}' onclick="clickbanner(row)"></image>
+    </div>
+    <indicator class="indicator" style="margin-top:{{indicatormargintop}};"></indicator>
+  </slider>
+  
+</template>
+
+<style>
+  .slider{
+    flex-direction: row;
+    width: 750;
+    height: 263;
+  }
+  .slider-pages{
+    flex-direction: row;
+    width: 750;
+    height: 263;
+  }
+  .image{
+    width: 750;
+    height: 263;
+  }
+  .indicator {
+        width:750;
+        height:80;
+        position:absolute;
+        top:1;
+        left:1;
+      item-color: white;
+      item-selectedColor: rgb(248,207,52);
+      item-size: 20;
+  }
+</style>
+
+<script>
+
+  var eventModule = require('@weex-module/requestevent'); 
+  var clickModule = require('@weex-module/didclickevent');
+  var stream = require('@weex-module/stream');
+
+  module.exports={
+      data:{
+        environment:'',
+        indicatormargintop:"210",
+        autoplay:'',   
+        items:[],
+        kindstr:'question',
+        //version:'133'
+      },
+      methods:{
+        
+        getbannerimage:function(image){
+          return "http://oss.aliyuncs.com/"+this.environment+"/"+image;
+        },
+        clickbanner:function(e){
+             
+             clickModule.didClickEvent(e);
+
+        }
+
+      },
+      ready:function(){
+      var self = this;
+      eventModule.getHomeDatas(function(ret){ 
+
+        self.environment=ret.environment;
+        var GET_URL_MobileBanner = ret.banner_url;
+        var BODY_URL='user_id='+ret.uid+'&sid='+ret.sid+'&_t='+ret._t+'&platform_id='+ret.platform+'&version='+ret.version+'&container_id='+ret.container_id+'&position='+self.kindstr;
+
+        stream.fetch({
+          method: 'POST',
+          url: GET_URL_MobileBanner,
+          body:BODY_URL,
+          type:'json'
+        }, function(ret) {
+          if(!ret.ok){
+            
+          }else{
+            //console.log('get:'+JSON.stringify(ret.data));
+            var dic = ret.data;//转为json对象
+            self.items= dic.list;
+          }
+        },function(response){
+
+          //console.log('get in progress:'+response.length);
+
+        });
+
+
+       });
+  }
+      
+  }
+</script>

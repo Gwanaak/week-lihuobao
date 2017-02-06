@@ -1,0 +1,478 @@
+<template>
+  <div style="flex-direction:column;">
+	<div  class="titlecell" onclick="isshowdetailcell">
+		<img src="{{getimage(row.tid)}}" style="width:120;height:120;margin-left:20;border-radius:10;"></img>
+		<div style="flex-direction:column;margin-left:20;">
+		   <div style="margin-bottom:15;align-items:center;flex-direction:row;">
+			 <text style="color:grey;font-size:28;">{{row.title}}</text>
+			 <text style="margin-left:16;color:red;font-size:28;">{{getstatus(row.status)}}</text>
+		   </div>  	
+			<div style="margin-top:15;align-items:center;flex-direction:row;">
+			 <text style="color:darkgrey;font-size:26;">剩余任务量:{{row.remain}}</text>
+			 <text style="margin-left:16;color:darkgrey;font-size:26;">待审核:{{row.examining}}</text>
+		   </div>
+		</div>
+		<img src="{{jiantoustyle}}" style="width:28;height:15;position:absolute;right:20;bottom:15;"></img>
+	</div>
+	<div  class="detailcell" if="{{isshow}}">
+	   <div style="margin-left:20;margin-top:10;" if="true">    
+		   <div style="flex-direction:row;padding:12;">
+				<div class="textbox">
+					<text class="textstr">发布时间：</text>
+					<text class="textstr">{{getcreatetime(row.createtime)}}</text>
+				</div>
+				<div class="textbox">
+					<text class="textstr">任务类型：</text>
+					<text class="textstr">{{gettype(row.type)}}</text>
+				</div>
+		   </div> 
+		   <div style="flex-direction:row;padding:12;">
+				<div class="textbox">
+					<text class="textstr">费用合计：</text>
+					<text class="textstr">¥ {{getcost(row.cost)}}</text>
+				</div>
+				<div class="textbox">
+					<text class="textstr">{{getrewardtitle(row.kind)}}</text>
+					<text class="textstr">{{getMoney(row.tiptype,row.tip)}}</text>
+				</div>
+		   </div> 
+		   <div style="flex-direction:row;padding:12;">
+				<div class="textbox">
+					<text class="textstr">{{gettasknumbertitle(row.kind)}}</text>
+					<text class="textstr">{{row.quantity}}</text>
+				</div>
+				<div class="textbox">
+					<text class="textstr">参与人数：</text>
+					<text class="textstr">{{row.participants}}</text>
+				</div>
+		   </div> 
+		   <div style="flex-direction:row;padding:12;">
+				<div class="textbox">
+					<text class="textstr">{{getdonenumbertitle(row.kind)}}</text>
+					<text class="textstr">{{getdonenumber(row.kind,row.pass,row.quantity_clerk)}}</text>
+				</div>
+				<div class="textbox">
+					<text class="textstr">成功率：</text>
+					<text class="textstr">{{getpassrate(row.pass,row.unpass)}}</text>
+				</div>
+		   </div> 
+		   <div style="flex-direction:row;padding:10;align-items:center;">
+        <div style="flex-direction:row;" onclick="isselected(row.tid)">
+    		    <img src="{{selecticon_url}}" style="width:28;height:28;"></img>
+    				<text style="color:grey;font-size: 26;">公开围观</text>
+        </div>    
+				<text style="margin-left:20;color:blue;border-color:blue;border-bottom-width:2;font-size:26;" onclick="goweiguandetails(row)">查看围观详情</text>
+		   </div> 
+		</div>
+    <div style="margin-left:20;margin-top:10;" if="false">    
+       <div style="flex-direction:row;padding:12;">
+        <div class="textbox">
+          <text class="textstr">发布时间：</text>
+          <text class="textstr">{{getcreatetime(row.createtime)}}</text>
+        </div>
+        <div class="textbox">
+          <text class="textstr">任务类型：</text>
+          <text class="textstr">{{gettype(row.type)}}</text>
+        </div>
+       </div> 
+       <div style="flex-direction:row;padding:12;">
+        <div class="textbox">
+          <text class="textstr">奖励发放：</text>
+          <text class="textstr">¥ {{getcost(row.cost)}}</text>
+        </div>
+        <div class="textbox">
+          <text class="textstr">参与人数：</text>
+          <text class="textstr">{{row.participants}}</text>
+        </div>
+       </div> 
+       <div style="flex-direction:row;padding:12;">
+        <div class="textbox">
+          <text class="textstr">奖励人数：</text>
+          <text class="textstr">87</text>
+        </div>
+        <div class="textbox">
+          <text class="textstr">正确率：</text>
+          <text class="textstr">{{getpassrate(row.pass,row.unpass)}}</text>
+        </div>
+       </div> 
+    </div>   	
+	</div>
+  <div style="flex-direction:column;" if="{{isshow}}">
+    <div class="buttoncell" if="false">
+       <div class="buttonbox" onclick="clickauditbutton(row)">
+        <img src="{{getimageshenhestatus(row.status)}}" style="width:30;height:30;"></img>
+        <text class="buttontext" style="color:{{gettextshenhecolor(row.status)}}">审核</text>
+       </div>
+       <div class="buttonbox" onclick="clickaddbutton(row)">
+        <img src="{{getimagestatus(row.append)}}" style="width:30;height:30;"></img>
+        <text class="buttontext" style="color:{{gettextcolor(row.append)}}">追加</text>
+       </div>
+       <div class="buttonbox" onclick="clickendbutton(row)">
+        <img src="http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/buiness_endbtn.png" style="width:30;height:30;"></img>
+        <text class="buttontext1">结束</text>
+       </div>
+    </div>
+    <div class="buttoncell" if="true">
+       <div class="buttonbox" onclick="clickstatisticsbutton(row)">
+        <img src="http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/buiness_statisticsbtn.png" style="width:30;height:30;"></img>
+        <text class="buttontext1">统计</text>
+       </div>
+       <div class="buttonbox" onclick="clickretrybutton(row)">
+        <img src="http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/retry.png" style="width:30;height:30;"></img>
+        <text class="buttontext1">重发</text>
+       </div>
+       <div class="buttonbox" onclick="clickendbutton(row)">
+        <img src="http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/buiness_endbtn.png" style="width:30;height:30;"></img>
+        <text class="buttontext1">结束</text>
+       </div>
+    </div>
+  </div>
+  <!-- <text>{{test}}</text> -->
+ </div>	
+</template>
+
+<style>
+	.titlecell{
+		flex-direction:row;
+		position:relative;
+		border-bottom-color:rgb(237,237,237);
+		border-bottom-width:1;
+		padding-top:16;
+		padding-bottom:16;
+		align-items:center;
+	}
+	.textbox{
+		flex-direction:row;
+		flex:1;
+		align-items:center;
+	}
+	.textstr{
+		color:grey;
+		font-size: 24;
+	}
+    .detailcell{
+    	border-bottom-width: 1;
+    	border-bottom-color: rgb(237,237,237);
+      padding-bottom: 8;
+    }
+    .buttoncell{
+    	border-bottom-color: rgb(237,237,237);
+    	border-bottom-width: 10;
+    	flex-direction:row;
+    	padding:10;
+      flex-direction:row;
+      justify-content:space-between;
+    }
+    .buttonbox{
+    	flex-direction:row;
+    	background-color:white;
+    	width:200;
+    	height:56;
+    	align-items:center;
+    	justify-content:center;
+    	border-radius:8;
+    	padding:8;
+    }
+    .buttontext{
+        font-size:26;
+        margin-left:8;
+    }
+    .buttontext1{
+        color:rgb(248,207,52);
+        font-size:26;
+        margin-left:8;
+    }
+
+</style>
+
+<script>
+    var eventModule = require('@weex-module/requestevent'); 
+    var stream = require('@weex-module/stream');
+    var clickModule = require('@weex-module/bhclickevent');
+
+    //var version = '134';
+
+    var statusmap={
+     
+      0:'未审核',
+      1:'未开始',
+      2:'进行中',
+      3:'已完成',
+      4:'已结束'
+  };
+    var typemap={
+
+      5:'产品培训',
+      6:'市场调研',
+      7:'勤分享',
+      8:'勤分享',
+      9:'做调研',
+      10:'常规调研',
+
+      311:'疗程用药调研',
+      312:'联合用药调研',
+      313:'进货单调研',
+      314:'保修卡调研',
+
+      211:'产品知识',
+      212:'养生常识',
+      213:'行业资讯',
+      214:'销售技能',
+      215:'职场须知',
+
+      110:'与产品合拍',
+      111:'拍摄货架',
+      112:'拍摄堆头',
+      113:'拍摄POP',
+      114:'拍摄端架',
+      115:'拍摄橱窗',
+      116:'拍摄海报',
+      117:'拍摄价签',
+      118:'与产品合拍',
+      119:'拍摄POP',
+      120:'摄影大赛'
+
+  };
+    var kquestionimage_url = 'http://oss.aliyuncs.com/testossimg/image/task_list_thumb/';//答题，分享 图片前缀 //开发
+    //var kquestionimage_url = 'http://oss.aliyuncs.com/exposs/image/task_list_thumb/'; //体验
+    //var kquestionimage_url = 'http://oss.aliyuncs.com/mingstatic/image/task_list_thumb/'; //正式
+
+    var tipunitstr='金币';
+
+    var btnstyle = false;
+
+	module.exports={
+        data:{
+           
+          isshow:false,
+          jiantoustyle:'http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/cell_drop_down.png',
+          row:{},
+          btnstyleurl:'http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/NOgouxuan.png',
+
+          isbtnselet:false,
+          test:'joqwjpqjpqjpqqpp'
+        },
+        computed:{
+
+           selecticon_url:{
+                
+                get: function() {
+                  
+                  return this.row.islook==0 ? "http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/NOgouxuan.png":"http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/gouxuanBtn.png";
+                },
+
+                set:function(v){
+                  
+                   this.row.islook = v;
+
+                }
+                
+           }
+
+        },
+        methods:{
+             
+             isshowdetailcell:function(){
+                  
+                 this.isshow = !this.isshow;
+
+                 if (this.isshow) {
+                    this.jiantoustyle="http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/cell_drop_up.png";
+                 }else{
+                 	this.jiantoustyle="http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/cell_drop_down.png";
+                 }
+             },
+
+             getstatus:function(statusnumber){
+
+                 return statusmap[statusnumber];
+             },
+             getcreatetime:function(createtime){
+
+             	var d = new Date(createtime * 1000);    //根据时间戳生成的时间对象
+                var date = (d.getFullYear()) + "." + (d.getMonth() + 1) + "." + (d.getDate());
+		        return date;     
+		     },
+             getcost:function(cost){
+
+             	var num = cost/100.0;
+             	return num.toFixed(1);
+             },
+             gettype:function(type){
+
+                return typemap[type];
+             },
+             getpassrate:function(pass,unpass){
+                
+                var passrate='0%';
+                if (pass==0) {
+
+                }else{
+                	var passnum=parseFloat(pass); //字符串转数字
+                	var num= passnum/(passnum+parseFloat(unpass))*100;
+                	passrate= num.toFixed(2) + '%';
+                }
+
+                return passrate;
+             },
+             getimage:function(tid){
+                 
+                return kquestionimage_url + tid; 
+             },
+             gettasknumbertitle:function(kind){
+                return kind==11? "任务盒数：":"任务数量：" ;
+             },
+             getdonenumbertitle:function(kind){
+                return kind==11? "晒票盒数：":"完成人数：" ;
+             },
+             getrewardtitle:function(kind){
+             	return kind==11? "单盒赏金：":"赏金：" ;
+             },
+             getdonenumber:function(kind,pass,quantity_clerk){
+                return kind==11? quantity_clerk:pass ;
+             },
+             getMoney:function(tiptype,tip){
+                  
+                 var tipstr=''; 
+                 if (tiptype==1) {
+                   tipstr=tip+'积分';
+                 }else if (tiptype==2) {
+                  tipstr=(tip/100.0).toFixed(1) + tipunitstr;
+                 }else{
+                  tipstr=(tip/100.0).toFixed(1) + '元';
+                 }
+                 
+                 // if (tip==0) {
+                 //  tipstr='赏金 ***';
+                 // }
+                 return tipstr;
+             },
+             getbtncolor:function(status){
+                 return status==0? 'lightgrey':'rgb(248,207,52)';//字符串形式返回
+             },
+
+             clickaddbutton:function(e){
+               // e.append=null;
+              if (e.append) {
+                clickModule.bhClickAddbtnEvent(e);
+              }else{
+
+              }
+              
+
+             },
+
+             clickauditbutton:function(e){
+
+              if (e.status) {
+                clickModule.bhClickAuditEvent(e);
+              }else{
+
+              }
+              
+
+             },
+             clickretrybutton:function(e){
+
+              clickModule.bhClickRetryEvent(e);
+
+             },
+             clickstatisticsbutton:function(e){
+
+              clickModule.bhClickStatisticsEvent(e);
+
+             },
+             clickendbutton:function(e){
+
+              clickModule.bhClickEndEvent(e);
+              
+             },
+             isselected:function(tid){
+
+                //this.row.islook = !this.row.islook;
+
+                var lookstr = !this.row.islook==0? "0":"1";
+                
+                var self = this;
+
+                eventModule.getHomeDatas(function(ret){ 
+                  
+                 
+
+                  var GET_URL_setLook = 'http://1525sg4410.51mypc.cn/mingadminmobile.php?m=setLook';//开发环境
+                  //var GET_URL_setLook = 'http://xiaomingtiyan.imwork.net/mingadminmobile.php?m=setLook';//体验环境
+                  //var GET_URL_setLook = 'http://ming.lihuobao.cn/mingadminmobile.php?m=setLook';//正式环境
+
+                  var BODY_URL='uid='+ret.uid+'&sid='+ret.sid+'&_t='+ret._t+'&platform=2&version='+ret.version+'&tid='+tid+'&islook='+lookstr;
+                 
+                 //self.test='uid='+ret.uid+'&sid='+ret.sid+'&_t='+ret._t+'&platform=2&version='+ret.version+'&tid='+tid+'&islook='+lookstr;
+
+                  stream.fetch({
+                    method: 'POST',
+                    url: GET_URL_setLook,
+                    body:BODY_URL,
+                    type:'json'
+                  }, function(ret) {
+                    if(!ret.ok){
+                      
+                    }else{
+                      
+                       var dict = ret.data;
+                       //self.test=dict.errCode+dict.errMsg;
+
+                       if (dict.errCode==0) {
+                        //self.test="success";
+                        self.row.islook = !self.row.islook;
+                       }else{
+                        //弹窗
+                       }
+
+                      
+                    }
+                  },function(response){
+                      //self.test="failse"
+                  });
+                  });
+
+                },
+
+                goweiguandetails:function(row){
+
+                  clickModule.bhClickWeiguanDetails(row);
+
+                },
+                getimagestatus:function(append){
+                  // append=null;
+                  if (append) {
+                    return "http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/buiness_addbtn.png";
+                  }else{
+                    return "http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/buiness_addgray@2x.png";
+                  }
+                },
+                gettextcolor:function(append){
+                  // append=null;
+                  if (append) {
+                    return "rgb(248,207,52)";
+                  }else{
+                    return "grey";
+                  }
+                },
+                getimageshenhestatus:function(status){
+                  if (status) {
+                    return "http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/buiness_examinebtn.png";
+                  }else{
+                    return "http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/buiness_shenghegray@2x.png";
+                  }
+                },
+                gettextshenhecolor:function(status){
+                  if (status) {
+                    return "rgb(248,207,52)";
+                  }else{
+                    return "grey";
+                  }
+                }
+
+
+        }
+ }       
+</script>

@@ -1,0 +1,119 @@
+<template>
+   <div>
+		<jwy-groupbutton groupiconurl="http://testossimg.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/home_Newtask@2x.png" grouptitle="新手认证" style="border-bottom-width:1;
+	    border-bottom-color:rgb(237,237,237);" if="{{havedatas}}"></jwy-groupbutton>
+	    <div  class="novice" repeat="{{row in rows}}" onclick="clicknovicecell(row)">
+	      <div style="flex-direction:column;flex:3;">
+	      	 <text style="color:grey;font-size:28;">{{row.name}}</text>
+	      	 <text style="margin-top:20;color:red;font-size:26;">{{getMoney(row.tiptype_id,row.tip)}}</text>
+	      </div>
+	      <text class="button" style="margin-top:10;background-color:orange;flex:1;">{{getStatus(row.status)}}</text>
+	    </div>
+   </div>
+</template>
+
+<style>
+    .novice{
+    	flex-direction:row;
+    	margin-top:10;
+    	margin-left:20;
+    	margin-right:20;
+    	padding-bottom:10;
+    	border-bottom-width:1;
+    	border-bottom-color:lightgrey;
+    }
+	.button{
+		width: 240;
+	  	height:60;
+	  	margin-right:20;
+	  	font-size:28;
+	  	text-align:center;
+	  	border-radius:8;
+	  	color:white;
+	  	flex:1;
+	    justify-content:center;
+	    padding: 12;
+  }
+</style>
+
+<script>
+    var eventModule = require('@weex-module/requestevent'); 
+    var clickModule = require('@weex-module/didclickevent');
+    var stream = require('@weex-module/stream');
+    
+    var tipunitstr='金币';
+	module.exports={
+        data:{
+           
+          havedatas:false, 
+          rows:[]
+
+        },
+        methods:{
+             
+             getMoney:function(tiptype,tip){
+                  
+                 var tipstr=''; 
+                 if (tiptype==1) {
+                   tipstr=tip+'积分';
+                 }else if (tiptype==2) {
+                 	tipstr='赏' + tip/100.0 + tipunitstr;
+                 }else{
+                 	tipstr='赏金' + tip/100.0 + '元';
+                 }
+
+                 return tipstr;
+             },
+             getStatus:function(status) {
+
+             	var statusstr='';
+             	if (status==0) {
+             		statusstr='领取赏金';
+             	}else{
+             		statusstr='待审核';
+             	}
+             	return statusstr;
+             },
+             clicknovicecell:function(e){
+             
+             clickModule.didClickNoviceCell(e);
+
+             }
+
+
+        },
+        ready:function(){
+	      var self = this;
+	      eventModule.getHomeDatas(function(ret){ 
+
+	        //nativeLog("ret:--------"+ret.uid+ret.sid+ret._t);
+	        //var GET_URL_NewbieTask = 'http://1525sg4410.51mypc.cn/mingop.php?m=getNewbieTask';//开发环境
+            //var GET_URL_NewbieTask = 'http://xiaomingtiyan.imwork.net/mingop.php?m=getNewbieTask';//体验环境
+            //var GET_URL_NewbieTask = 'http://ming.lihuobao.cn/mingop.php?m=getNewbieTask';//正式环境
+	        //var version = '133';
+
+            var GET_URL_NewbieTask = ret.newbie_url;
+	        var BODY_URL='user_id='+ret.uid+'&sid='+ret.sid+'&_t='+ret._t+'&platform_id='+ret.platform+'&version='+ret.version+'&container_id='+ret.container_id;
+
+	        stream.fetch({
+	          method: 'POST',
+	          url: GET_URL_NewbieTask,
+	          body:BODY_URL,
+	          type:'json'
+	        }, function(ret) {
+	          if(!ret.ok){
+	            
+	          }else{
+	            //console.log('get:'+JSON.stringify(ret.data));
+	            var dic = ret.data;
+	            self.rows=dic.tasks;
+	            self.havedatas=true;
+	          }
+	        },function(response){
+	          // console.log('get in progress:'+response.length);
+	          // self.test = "request failed";
+	        });
+          });
+	    }
+    }
+</script>

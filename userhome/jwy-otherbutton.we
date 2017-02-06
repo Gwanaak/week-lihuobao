@@ -1,0 +1,41 @@
+<template>
+	<div style="flex-direction:column;align-items:center;" onclick="clickotherkindbtn(btndict)">
+		<image class="iconimage" src="{{iconurl}}" style="width:{{btnwidth}};height:{{btnwidth}};border-radius:{{btnradius}};"></image>
+		<text  class="icontitle" style="color:{{titlecolor}}">{{icontitle}}</text>
+	</div>
+</template>
+
+<style>
+	.iconimage{
+  	   
+     }
+  .icontitle{
+    	 margin-top: 10;
+  	   font-size:24;
+     }
+</style>
+
+<script>
+
+  var clickbtnModule = require('@weex-module/didclickevent');
+
+	module.exports={
+      data:{
+         btndict:{},
+         iconurl:'',
+         icontitle:'',
+         btnwidth:80,
+         btnradius:40,
+         titlecolor:'grey'
+     },
+     methods:{
+        
+        clickotherkindbtn:function(e){
+             
+
+             clickbtnModule.didClickEvent(e);
+
+         }
+      }
+  }
+</script>

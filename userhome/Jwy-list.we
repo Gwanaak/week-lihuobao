@@ -1,0 +1,146 @@
+<template>
+<div style="background-color:white;width:750;">
+ <list class="list">
+  <refresh  class="refresh" onRefresh="handleRefresh" display="{{displayRefresh}}">
+        <loading-indicator style="width:100;height:100;color:grey;"></loading-indicator>
+        <text style="margin-left:10;color:black;">{{refreshstr}}</text>
+  </refresh>
+  <cell class="header" style=";background-color:white">
+    <Jwy-slider autoplay="true"></Jwy-slider>
+    <Jwy-kindbuttons if="{{isappleaudit}}"></Jwy-kindbuttons>
+    <Jwy-otherkindbuttons></Jwy-otherkindbuttons>
+  </cell>
+  <cell>
+     <Jwy-novicecell></Jwy-novicecell>
+  </cell>
+  <cell>
+    <jwy-groupbutton groupiconurl="http://testossimg.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/homePage_today.png" grouptitle="今日推荐" style="border-bottom-width:1;
+    border-bottom-color:lightgrey;"></jwy-groupbutton>
+  </cell>
+  <cell onappear="onappear" ondisappear="ondisappear" class="cell" repeat="{{row in rows}}" onclick="clcikmanagecell(row)">
+    <Jwy-managecell row="{{row}}" if="{{row.categorylevel1_id!=15&&row.categorylevel2_id!=1217}}" environment="{{environment}}"></Jwy-managecell>
+    <Jwy-doctorcell row="{{row}}" if="{{row.categorylevel1_id==15}}" style="margin-top:20;" environment="{{environment}}"></Jwy-doctorcell>
+    <Jwy-knowledgecell row="{{row}}" if="{{row.categorylevel1_id==2&&row.categorylevel2_id==1217}}" environment="{{environment}}"></Jwy-knowledgecell>
+  </cell>
+
+  <cell>
+    <text style="font-size:{{size}};color:lightgrey;text-align:center;">非指定店员仅展示部分活动</text>
+  </cell>
+  </list>
+ </div> 
+</template>
+<style>
+  .cell{
+    width: 750;
+  }
+  .refresh {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction:row;
+    width:750;
+    height:100;
+  }
+  .type{
+    
+    margin-top: 8;
+    border-width: 1;
+    border-radius: 10;
+    border-color: grey;
+    color: grey;
+    font-size: 24;
+    text-align: center;
+    padding: 8;
+    height: 100;
+  }
+</style>
+<script>
+  require("./Jwy-slider.we");
+  require("./Jwy-kindbuttons.we");
+  require("./Jwy-otherkindbuttons.we");
+  require("./jwy-groupbutton.we");
+  require("./Jwy-managecell.we");
+  require("./Jwy-doctorcell.we");
+  require("./Jwy-novicecell.we");
+  require("./Jwy-knowledgecell.we");
+
+  var eventModule = require('@weex-module/requestevent'); 
+  var clickModule = require('@weex-module/didclickevent');
+  var stream = require('@weex-module/stream');
+
+  var mm='0';//苹果审核状态为 1
+
+  module.exports = {
+    ready:function(){
+
+      this.requestHomeDatas();
+  },
+    data: {
+      test:'',
+      //version:'133',
+      environment:'',
+      displayRefresh: 'show',
+      refreshstr:'下拉刷新',
+      rows:[],
+      size:27,
+      isappleaudit:true  //苹果审核状态是否显示四个小类别
+      },
+
+    methods: {
+         requestHomeDatas:function(){
+
+           var self = this;
+           eventModule.getHomeDatas(function(ret){ 
+
+            nativeLog("ret:--------"+ret.uid+ret.sid+ret._t);
+            //getHomeRecommend
+            //var GET_URL_HomeRecommend = 'http://1525sg4410.51mypc.cn/mingop.php?m=getHomeRecommend';//开发环境
+            //var GET_URL_HomeRecommend = 'http://xiaomingtiyan.imwork.net/mingop.php?m=getHomeRecommend';//体验环境
+            //var GET_URL_HomeRecommend = 'http://ming.lihuobao.cn/mingop.php?m=getHomeRecommend';//正式环境
+             self.environment=ret.environment;
+            var GET_URL_HomeRecommend = ret.homelist_url;
+            // var GET_URL_HomeRecommend = ret.ioshomelist_url;
+            var BODY_URL='user_id='+ret.uid+'&sid='+ret.sid+'&_t='+ret._t+'&platform_id='+ret.platform+'&version='+ret.version+'&mm='+mm+'&container_id='+ret.container_id;
+
+            stream.fetch({
+              method: 'POST',
+              url: GET_URL_HomeRecommend,
+              body:BODY_URL,
+              type:'json'
+            }, function(ret) {
+              if(!ret.ok){
+                //self.test = "request failed";
+              }else{
+                //console.log('get:'+JSON.stringify(ret.data));
+                var dic =ret.data;
+                //self.test='get:'+JSON.stringify(ret.data);
+                self.rows= dic.tasks;
+
+                self.displayRefresh = 'hide';
+                self.refreshstr='下拉刷新';
+              }
+            },function(response){
+              //console.log('get in progress:'+response.length);
+              //self.test = "request failed";
+            });
+
+              });
+         },
+
+         handleRefresh: function (e) {
+             var self = this;
+             self.displayRefresh = 'show';
+             self.refreshstr='正在刷新';
+             
+             self.requestHomeDatas();
+
+           },
+
+         clcikmanagecell:function(e){
+             
+             clickModule.didClickManageCell(e);
+
+         }
+        }
+  }
+</script>

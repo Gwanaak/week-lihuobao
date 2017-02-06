@@ -1,0 +1,155 @@
+<template>
+  <div style="background-color:white;width:750;">
+   <list class="list">
+    <refresh  class="refresh" onRefresh="handleRefresh" display="{{displayRefresh}}">
+        <loading-indicator style="width:60;height:60;color:orange;"></loading-indicator>
+        <text style="margin-left:0;color:black;">{{refreshstr}}</text>
+    </refresh>
+    <cell class="cell" repeat="{{row in rows}}" onclick="clcikcell(sort,row)">
+      <doingcell row="{{row}}" environment="{{environment}}" sort="{{sort}}" scorename="{{scorename}}"></doingcell>
+    </cell>
+    <!-- <cell>
+    <text>{{test}}</text>
+   </cell> -->
+   </list>
+   <text class="hintlabel" if="{{isshow==0}}">没有找到纪录哦~</text>
+    
+  </div> 
+</template>
+<style>
+   .refresh {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction:row;
+    width:750;
+    height:40;
+  }
+  .list{
+    width: 750;
+  }
+  .hintlabel{
+    position: absolute;
+    top: 400;
+    width:750;
+    height:50;
+    color: black;
+    font-size: 30;
+    font-weight: bold;
+    text-align: center;
+  }
+  .cell{
+    width: 750;
+  }
+  
+</style>
+<script>
+
+  
+  var eventModule = require('@weex-module/requestevent'); 
+  var clickModule = require('@weex-module/mytaskevent');
+  var stream = require('@weex-module/stream');
+
+  require("./doingcell.we");
+
+  module.exports = {
+      created: function() {
+          var bundleUrl = this.$getConfig().bundleUrl;
+          // console.log('hit', bundleUrl);
+          var sortstr=this.getQueryString(bundleUrl,'sort');
+           
+          this.sort=sortstr;
+          nativeLog("sort:--------"+sortstr+bundleUrl);
+         
+          this.requestListDatas(sortstr);
+      },
+
+      ready:function(){
+
+          //this.requestHomeDatas();
+      },
+      
+      data: {
+        displayRefresh: 'show',
+        refreshstr:'下拉刷新',
+        rows:[],
+        sort:'',
+        isshow:1,
+        environment:'',
+        test:''
+        },
+
+      methods: {
+          requestListDatas:function(sort){
+
+               var self = this;
+               eventModule.getHomeDatas(function(ret){ 
+
+                //nativeLog("ret:--------"+ret.uid+ret.sid+ret._t);
+                self.environment=ret.environment;
+                var GET_URL_List = ret.main_url+sort;
+                var BODY_URL='user_id='+ret.uid+'&sid='+ret.sid+'&_t='+ret._t+'&platform_id='+ret.platform+'&version='+ret.version+'&container_id='+ret.container_id;
+
+                stream.fetch({
+                  method: 'POST',
+                  url: GET_URL_List,
+                  body:BODY_URL,
+                  type:'json'
+                }, function(ret) {
+                  if(!ret.ok){
+                    // self.test = "request failed!";
+                    self.isshow=0;
+                  }else{
+                    //console.log('get:'+JSON.stringify(ret.data));
+                    var dic = ret.data;
+                    self.rows=dic.tasks;
+                    // self.test='get:'+JSON.stringify(ret.data);
+                    self.displayRefresh = 'hide';
+                    self.refreshstr='下拉刷新';
+
+                    var array = dic.tasks;
+
+                    if (array.length==0) {
+                        self.isshow=0;
+                    }else{
+                        self.isshow=1;
+                    }
+
+                  }
+                },function(response){
+                  // console.log('get in progress:'+response.length);
+                  //self.test = "request failed+"+JSON.stringify(response);
+                  // self.isshow=0;
+                });
+
+                  });
+             },
+
+             getQueryString:function(url,name){
+
+                   var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+                   var r = url.split("?")[1].match(reg);
+                   if(r!=null) return unescape(r[2]); return null;
+             },
+             clcikcell:function(sort,row){
+                   if (sort=='getUserTaskDoing') {
+
+                       clickModule.didClickCell(row);
+                        
+                   }else{
+
+                   }
+             },
+             handleRefresh: function (e) {
+               var self = this;
+               self.displayRefresh = 'show';
+               self.refreshstr='正在刷新';
+               
+               this.requestListDatas(this.sort);
+
+            },
+
+          }
+   }
+
+</script>

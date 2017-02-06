@@ -1,0 +1,192 @@
+<template>
+<div style="background-color:white;width:750;">
+ <list class="list">
+  <refresh  class="refresh" onRefresh="handleRefresh" display="{{displayRefresh}}">
+        <loading-indicator style="width:100;height:100;color:grey;"></loading-indicator>
+        <text style="margin-left:10;color:black;">{{refreshstr}}</text>
+  </refresh>
+  <cell class="header" style="background-color:white;" if="{{ishide}}">
+    <lhb-bhslider autoplay="true"></lhb-bhslider>
+    <lhb-bhkindbuttons></lhb-bhkindbuttons>
+  </cell>
+   <cell>
+     <lhb-bhprofile></lhb-bhprofile><!--业务需求暂时去掉-->
+  </cell> 
+  <cell style="background-color:white;" if="{{ishide}}">
+    <div style="flex-direction:row;margin-top:15;border-bottom-width:1;border-bottom-color:lightgrey;padding-bottom:15;align-items:center;">
+      <img src="http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/buiness_managent_logo.png" style="width:30;height:30;margin-left:20;"></img>
+      <text style="margin-left:10;font-size:30;color:grey;">任务管理</text>
+      <text style="font-size:26;margin-left:40;color:grey;">电脑登录www.lihuobao.cn获取更多权限</text>
+    </div>
+  </cell>
+  <!-- <cell style="margin-top:10;">
+    <div class="wrapper" >
+      <lhb-bhdropdownmenu class="dropdown" status-ida="{{status1}}" status-idb="{{status2}}" status-idc="{{status3}}">
+               <div onappear="onappear" ondisappear="ondisappear" repeat="{{row in rows}}">
+                    <lhb-bhcell row="{{row}}"></lhb-bhcell>
+               </div>
+      </lhb-bhdropdownmenu>
+    </div>  
+  </cell> -->
+  <cell onappear="onappear" ondisappear="ondisappear" repeat="{{row in rows}}">
+      <lhb-bhcell row="{{row}}" environment="{{environment}}"></lhb-bhcell>
+  </cell>
+  <!-- <cell>
+     <text>{{test}}</text>
+  </cell> -->
+ </list>
+</div> 
+</template>
+
+
+<style>
+  .wrapper{
+        justify-content:flex-start;
+        flex-direction: column;
+        position: relative;
+    }
+	.dropdown{
+        /*margin-top: 500;*/
+        justify-content: center;
+        align-content: stretch;
+        position: relative;
+        /*z-index: 100;*/
+    }
+	.refresh {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction:row;
+    width:750;
+    height:100;
+  }
+
+</style>
+
+<script>
+  require('./lhb-bhdropdownmenu.we');
+	require("./lhb-bhslider.we");
+	require("./lhb-bhkindbuttons.we");
+  require("./lhb-bhprofile.we");
+  require("./lhb-bhcell.we");
+
+  var eventModule = require('@weex-module/requestevent'); 
+  var stream = require('@weex-module/stream');
+
+  //var version = '134';
+
+  module.exports={
+        data:{
+            environment:'mingstatic',
+            ishide:true,
+            rows:[],
+            test:'request failed',
+            displayRefresh: 'show',
+            refreshstr:'下拉刷新',
+
+            screenHeight: 0,
+            // biz
+            status1: '0',
+            status2: '1',
+            status3: '0'
+        },
+
+        ready:function(){
+            this.requestHomeDatas();
+
+            //this.screenHeight = 4000;//this.$getConfig().env.deviceHeight ;
+            this.$on('statuschangevisible', function (e) {
+                var detail = e.detail;
+                // this.toast({
+                //     message: JSON.stringify(detail)
+                // });
+                var visibily=detail.isvisibility;
+                if (visibily=='hidden') {
+                  this.ishide=true;
+                }else{
+                  this.ishide=false;
+                }
+                this.filter();
+            }.bind(this));
+
+            this.$on('statuschange', function (e) {
+                // var detail = e.detail;
+                // this.toast({
+                //     message: JSON.stringify(detail)
+                // });
+                // this.status = detail.id;
+                this.filter();
+            }.bind(this));
+            this.filter();
+      },
+      methods:{
+             requestHomeDatas:function(){
+
+                var self = this;
+                eventModule.getHomeDatas(function(ret){ 
+
+                  //var GET_URL_homeTaskList = 'http://1525sg4410.51mypc.cn/mingadminmobile.php?m=homeTaskList';//开发环境
+                  //var GET_URL_homeTaskList = 'http://xiaomingtiyan.imwork.net/mingadminmobile.php?m=homeTaskList';//体验环境
+                  //var GET_URL_homeTaskList = 'http://ming.lihuobao.cn/mingadminmobile.php?m=homeTaskList';//正式环境
+                  self.environment=ret.environment;
+                  var GET_URL_homeTaskList = ret.businesslist_url;
+
+                  var BODY_URL='user_id='+ret.uid+'&sid='+ret.sid+'&_t='+ret._t+'&platform_id=2&version='+ret.version+'&container_id='+ret.container_id;
+            
+                  stream.fetch({
+                    method: 'POST',
+                    url: GET_URL_homeTaskList,
+                    body:BODY_URL,
+                    type:'json'
+                  }, function(ret) {
+                    if(!ret.ok){
+                      
+                    }else{
+                      
+                       var dict = ret.data;
+                       self.rows = dict.tasks;
+                       
+                       self.displayRefresh = 'hide';
+                       self.refreshstr='下拉刷新';
+                      // console.log('get:'+JSON.stringify(ret.data));
+                      //self.test='get:'+JSON.stringify(ret.data);
+                    }
+                  },function(response){
+                      //console.log('get:'+'failed');
+                      //self.test='get:'+'request failed';
+                  });
+                  });
+             },
+
+             handleRefresh: function (e) {
+               var self = this;
+               self.displayRefresh = 'show';
+               self.refreshstr='正在刷新';
+               
+               self.requestHomeDatas();
+
+           },
+
+           toast: function (params) {
+                var modal = require('@weex-module/modal');
+                modal.toast(params);
+            },
+
+            filter: function () {
+                var status = this.status;
+                this.list = [];
+                var allList = JSON.parse(initData);
+                if(status == '0') {
+                    this.list = allList;
+                }else {
+                    this.list = allList.filter(function(item){
+                        return item.questionStatus == status;
+                    });
+                }
+            }
+             
+     }
+
+    }
+</script>
+

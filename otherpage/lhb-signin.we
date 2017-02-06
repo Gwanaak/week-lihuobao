@@ -1,0 +1,205 @@
+<template>
+   <div style="background-color:white;width:750;flex-direction:column;">
+     <div style="align-items:center;">
+      <img src="{{imageurl}}" class="main-image"></img>
+      <text class="textlabel1">{{titlestr}}</text>
+      <text class="textlabel2">{{promptstr}}</text>
+      <img src="http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/telltoFroend@2x.png" class="tell-button" onclick="didclickshare"></img>
+     </div> 
+	 <div style="margin-top:10;background-color:rgb(215,215,215);height:60;justify-content:center;">
+	  	 <text class="left-icon">幸运星</text>
+	 </div>
+     <list class="list" style="width:750;">
+          <cell class="cell" repeat="{{row in rows}}">
+            <div style="flex-direction:row;align-items:center;">
+			     <img class="icon-image" src="{{getIconImg(row.user_id)}}"></img>
+			     <div style="margin-left:10;">
+			     	<div style="flex-direction:row;margin-top:3;align-items:center;">
+			     		<text class="namelabel">{{row.name}}</text>
+			     		<text class="datelabel">{{getdates(row.time)}}</text>
+			     		<text class="timelabel">{{gettimes(row.time)}}</text>
+			     	</div>
+			     	<text class="titlelabel">{{row.desc}}</text>
+			     </div>
+			     <text class="scorelabel">{{getScore(row.rank_score)}}</text>
+		    </div> 
+		    <text class="line"></text>
+		  </cell>
+     </list>
+   </div>
+</template>
+<style>
+	.cell{
+	    width: 750;
+	  }
+	.main-image{
+		width:750;
+		height:263;
+	}
+	.textlabel1{
+		margin-top:16;
+		font-size:34;
+		color: orange;
+	}
+	.textlabel2{
+		margin-top:16;
+		font-size:24;
+		color: black;
+	}
+	.tell-button{
+		margin-top: 16;
+		width: 320;
+		height: 94;
+	}
+	.left-icon{
+        margin-left:16;
+        border-left-width:4;
+        border-left-color:#ffcc00;
+        padding-left:10;
+        font-size: 26;
+        color: grey;
+        font-weight:bold;
+	}
+	.icon-image{
+		width:100;
+		height: 100;
+		margin-left: 8;
+		margin-top: 10;
+	}
+	.namelabel{
+		lines:1;
+        width: 120;
+        font-size: 32;
+        color: black;
+        font-weight:bold;
+	}
+	.datelabel{
+        margin-left: 50;
+        color: grey;
+        font-size: 22;
+	}
+	.timelabel{
+        margin-left: 20;
+        color: grey;
+        font-size: 22;
+	}
+	.titlelabel{
+        margin-top: 20;
+        color: grey;
+        font-size: 28;
+        max-width:450;
+        text-overflow:ellipsis;
+        lines:1;
+	}
+	.scorelabel{
+		position: absolute;
+		top:32;
+		right:20;
+		font-size: 36;
+		color: orange;
+		font-weight:bold;
+	}
+	.line{
+		margin-left: 30;
+		margin-top:10;
+		background-color:rgb(210,210,210);
+		height: 1;
+	}
+
+
+</style>
+
+<script>
+    var clickModule = require('@weex-module/didclickshare');
+    var stream = require('@weex-module/stream');
+    var getluckstar_url='http://oss.aliyuncs.com/mingstatic/lottery/lucky_star/lucky_star_list.json';
+
+	module.exports = {
+      created: function() {
+          var bundleUrlStr = this.$getConfig().bundleUrl;
+          var bundleUrl=decodeURIComponent(bundleUrlStr);//解码
+          // nativeLog("sort:--------"+sortstr+this.titlestr+bundleUrl);
+          this.scorename=this.getQueryString(bundleUrl,'scorename');
+          this.titlestr=this.getQueryString(bundleUrl,'title');
+          this.promptstr=this.getQueryString(bundleUrl,'prompt');
+          var imgurl=this.getQueryString(bundleUrl,'appsign');
+          if (imgurl==0) {
+          	this.imageurl='http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/bg_ad_checkin@2x.jpg';
+          }else{
+          	this.imageurl='http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/bg_ad_checkin_finished.png';
+          }
+      },
+
+      ready:function(){
+
+          this.getListDatas();
+      },
+      
+      data: {
+        rows:[],
+        imageurl:'',
+        titlestr:'',
+        promptstr:'',
+        scorename:''
+        },
+
+      methods: {
+
+         getListDatas:function() {
+
+         	var self=this;
+		     stream.fetch({
+		        method: 'GET',
+		        url: getluckstar_url,
+		        type:'json'
+		      }, function(ret) {
+		        if(!ret.ok){
+		          // me.getResult = "request failed";
+		        }else{
+		          var dic =ret.data;
+		          self.rows= dic.list;
+		        }
+		      },function(response){
+		        // console.log('get in progress:'+response.length);
+		        // me.getResult = "bytes received:"+response.length;
+		      });        
+		 },
+		 getQueryString:function(url,name){
+
+                   var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+                   var r = url.split("?")[1].match(reg);
+                   if(r!=null) return unescape(r[2]); return null;
+             },
+		 getIconImg:function(user_id){
+
+		 	return 'http://oss.aliyuncs.com/mingstatic/userpage/headimg/'+user_id;
+
+		 },
+		 getScore:function(rank_score){
+		 	return rank_score+this.scorename;
+		 },
+		 getdates:function(starttime){
+             	var date = new Date(starttime*1000); 
+             	//date.setTime(starttime*1000);
+             	var year=date.getFullYear();
+				var month=date.getMonth()+1; 
+				var day=date.getDate();
+                return month+"."+day;
+         },
+         gettimes:function(starttime){
+             	var date = new Date(starttime*1000); 
+             	//date.setTime(starttime*1000);
+				var hour=date.getHours();
+				var minutes=date.getMinutes();
+                return hour+":"+minutes;
+         },
+         didclickshare:function(){
+
+         	   clickModule.didClickShareButton();
+         }
+
+
+      }
+}
+
+</script>

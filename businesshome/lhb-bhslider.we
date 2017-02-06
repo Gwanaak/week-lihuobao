@@ -1,0 +1,108 @@
+<template>
+	<slider class="slider" auto-play="{{autoplay}}">
+		<div class="slider-pages" repeat="{{row in items}}">
+			<image class="image" src='{{getbannerimage(row.image)}}' onclick="clickbanner(row)"></image>
+		</div>
+		<indicator class="indicator" style="margin-top:{{indicatormargintop}};"></indicator>
+	</slider>
+	
+</template>
+
+<style>
+	.slider{
+		flex-direction: row;
+		width: 750;
+		height: 290;
+	}
+	.slider-pages{
+		flex-direction: row;
+		width: 750;
+		height: 290;
+	}
+	.image{
+		width: 750;
+		height: 290;
+	}
+	.indicator {
+        width:750;
+        height:80;
+        position:absolute;
+        top:1;
+        left:1;
+	    item-color: white;
+	    item-selectedColor: rgb(248,207,52);
+	    item-size: 20;
+  }
+</style>
+
+<script>
+
+  var eventModule = require('@weex-module/requestevent'); 
+  var clickModule = require('@weex-module/bhclickevent');
+  var stream = require('@weex-module/stream');
+
+  //var version = '134';
+  //var pictureurl="http://oss.aliyuncs.com/testossimg/";//oss上banner图片前缀
+  //var pictureurl="http://oss.aliyuncs.com/exposs/";
+  //var pictureurl="http://oss.aliyuncs.com/mingstatic/";
+
+  module.exports={
+      data:{
+        environment:'mingstatic',
+        autoplay:'',
+      	indicatormargintop:"230",
+      	autoplay:'',   
+        items:[]
+        //version:'133'
+      },
+      methods:{
+        
+        getbannerimage:function(image){
+          return "http://oss.aliyuncs.com/"+this.environment+"/"+image;
+        },
+        
+        clickbanner:function(e){
+             
+             clickModule.didClickBannerEvent(e);
+
+         }
+      },
+
+      ready:function(){
+      var self = this;
+      eventModule.getHomeDatas(function(ret){ 
+
+        var positionStr = "home_admin";//可能的值：home:用户端首页, home_admin:商户端首页，question:任务展示列表-学习列表, share:任务展示列表-分享列表, ticket:任务展示列表-小票列表, job:任务展示列表-理货列表, scoremall:积分商城, appsign:签到
+        //nativeLog("ret:--------"+ret.uid+ret.sid+ret._t);
+        //var GET_URL_MobileBanner = 'http://1525sg4410.51mypc.cn/mingop.php?m=getMobileBanner';//开发环境
+        //var GET_URL_MobileBanner = 'http://xiaomingtiyan.imwork.net/mingop.php?m=getMobileBanner';//体验环境
+        //var GET_URL_MobileBanner = 'http://ming.lihuobao.cn/mingop.php?m=getMobileBanner';//正式环境
+        self.environment=ret.environment;
+        var GET_URL_MobileBanner = ret.banner_url;
+        var BODY_URL='user_id='+ret.uid+'&sid='+ret.sid+'&_t='+ret._t+'&platform_id=2&version='+ret.version+'&position='+positionStr+'&container_id='+ret.container_id;
+
+        stream.fetch({
+          method: 'POST',
+          url: GET_URL_MobileBanner,
+          body:BODY_URL,
+          type:'json'
+        }, function(ret) {
+          if(!ret.ok){
+            
+          }else{
+            //console.log('get:'+JSON.stringify(ret.data));
+            var dic = ret.data;//转为json对象
+            self.items= dic.list;
+          }
+        },function(response){
+
+          //console.log('get in progress:'+response.length);
+
+        });
+
+
+       });
+  }
+      
+  }
+</script>

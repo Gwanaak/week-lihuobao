@@ -1,0 +1,79 @@
+<template>
+	<div class="wrapper">
+	  <text style="height:600;color:black;">我是上面那部分</text>
+	  <div style="flex-direction:row;">
+        <we-dropdown class="dropdown" status-id="0" status="{{status1}}" status-flag="0" topvalue="-351">
+        </we-dropdown>
+        <we-dropdown class="dropdown" status-id="1" status="{{status2}}" status-flag="1" topvalue="-351">
+        </we-dropdown>
+        <we-dropdown class="dropdown" status-id="0" status="{{status3}}" status-flag="2" topvalue="-171">
+        </we-dropdown>
+      </div>  
+      <text style="margin-top:50;">{{test}}</text>
+    </div>
+</template>
+
+<style>
+	.dropdown{
+        justify-content: center;
+        align-content: stretch;
+        position: relative;
+        z-index: 100;
+    }
+    .wrapper{
+        justify-content:flex-start;
+        flex-direction: column;
+        position: relative;
+    }
+</style>
+
+<script>
+    require('./we-dropdown.we');
+
+
+    module.exports = {
+        data: {
+        	test:'我是测试',
+            screenHeight: 0,
+            list: [],
+            status1: [
+
+                {id: '0', name: '全部'},
+                {id: '1', name: '待审核'},
+                {id: '2', name: '进行中'},
+                {id: '3', name: '已完成'},
+                {id: '4', name: '已结束'}
+
+            ],
+            status2: [
+
+                {id: '0', name: '全部'},
+                {id: '1', name: '本月'},
+                {id: '2', name: '近三个月'},
+                {id: '3', name: '近半年'},
+                {id: '4', name: '近一年'}
+
+            ],
+            status3: [
+
+                {id: '0', name: '全部'},
+                {id: '1', name: '我的'},
+                {id: '2', name: '其他'}
+
+            ]
+        },
+        ready: function () {
+              this.screenHeight = this.$getConfig().env.deviceHeight ;
+            this.$on('statuschange', function (e) {
+                var detail = e.detail;
+                // this.toast({
+                //     message: JSON.stringify(detail)
+                // });
+                //this.status = detail.id;
+                //this.filter();
+                this.test=detail.id + detail.name + detail.flag;
+            }.bind(this));
+            ///this.filter();
+        }
+    }
+</script>

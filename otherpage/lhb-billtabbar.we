@@ -1,0 +1,104 @@
+<template>
+    <div class="wrapper">
+        <div class="tabbar" append = "tree">
+            <lhb-billitem repeat={{tabItems}} index={{index}} icon={{icon}} title={{title}} title-color={{titleColor}}></lhb-billitem>
+        </div>
+        <div style="position:fixed;top:0;right:0;height:70;width:150;background-color:rgb(240,240,240);"></div>
+        <embed class="content" style="visibility:{{visibility}}" repeat={{tabItems}} src={{src}} type="weex"></embed>
+    </div>
+</template>
+
+<style>
+    .wrapper { 
+        width: 750; 
+        position: absolute; 
+        top: 0; 
+        left: 0; 
+        right: 0; 
+        bottom: 0;
+    }
+    .content { 
+        position: fixed; 
+        top: 0; 
+        left: 0; 
+        right: 0; 
+        bottom: 0; 
+        margin-top: 70;  
+        margin-bottom: 0;
+        background-color: white;
+    }
+    .tabbar { 
+        flex-direction: row; 
+        position: fixed; 
+        top: 0; 
+        left: 0; 
+        right: 150;  
+        height: 70;
+        background-color:rgb(240,240,240);
+    }
+</style>
+
+<script>
+    require("./lhb-billitem.we");
+
+    module.exports = {
+        data: {
+          tabItems: [
+                    { index: 0,
+                      title: '提现记录',
+                      titleColor: 'grey',
+                      icon: '',
+                      image: 'http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/trans.png',
+                      selectedImage: 'http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/bg_first_tab_billing_pressed.png',
+                      src: 'http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/JS_138/lhb-billlist.js?sort=getFortuneOutLog',
+                      visibility: 'visible',
+                      selectedColor:'#ffcc00'},
+
+                      { index: 1,
+                      title: '收入记录',
+                      titleColor: 'grey',
+                      icon: '',
+                      image: 'http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/trans.png',
+                      selectedImage: 'http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/bg_tab_billing_pressed.png',
+                      src: 'http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/JS_138/lhb-billlist.js?sort=getFortuneInLog',
+                      visibility: 'hidden',
+                      selectedColor:'#ffcc00'}
+
+                     ],
+          selectedIndex: 0,
+          selectedColor: '#ff0000',
+          unselectedColor: 'grey',
+        },
+        created: function () {
+          this.selected(this.selectedIndex);
+
+          this.$on('tabItem.onClick',function(e){
+            var detail= e.detail;
+            this.selectedIndex = detail.index;
+            this.selected(detail.index);
+
+            var params = {
+              index: detail.index
+            };
+            this.$dispatch('tabBar.onClick', params);
+          });
+        },
+        methods: {
+            selected: function(index) {
+              for(var i = 0; i < this.tabItems.length; i++) {
+                var tabItem = this.tabItems[i];
+                if(i == index){
+                  tabItem.icon = tabItem.selectedImage;
+                  tabItem.titleColor = tabItem.selectedColor;
+                  tabItem.visibility = 'visible';
+                }
+                else {
+                  tabItem.icon = tabItem.image;
+                  tabItem.titleColor = this.unselectedColor;
+                  tabItem.visibility = 'hidden';
+                }
+              }
+            },  
+        }
+    }
+</script>

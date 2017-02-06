@@ -1,0 +1,1310 @@
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId])
+/******/ 			return installedModules[moduleId].exports;
+
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			exports: {},
+/******/ 			id: moduleId,
+/******/ 			loaded: false
+/******/ 		};
+
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+
+/******/ 		// Flag the module as loaded
+/******/ 		module.loaded = true;
+
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+
+
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(0);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ function(module, exports, __webpack_require__) {
+
+	;__weex_define__("@weex-component/9d85bb126b62295b2ef9db79f09ef056", [], function(__weex_require__, __weex_exports__, __weex_module__){
+
+
+
+
+
+	;
+		__webpack_require__(1);
+		__webpack_require__(2);
+	  __webpack_require__(4);
+	  __webpack_require__(6);
+
+	;__weex_module__.exports.template = __weex_module__.exports.template || {}
+	;Object.assign(__weex_module__.exports.template, {
+	  "type": "div",
+	  "style": {
+	    "backgroundColor": "#FFFFFF",
+	    "width": 750
+	  },
+	  "children": [
+	    {
+	      "type": "list",
+	      "classList": [
+	        "list"
+	      ],
+	      "children": [
+	        {
+	          "type": "refresh",
+	          "classList": [
+	            "refresh"
+	          ],
+	          "events": {
+	            "refresh": "handleRefresh"
+	          },
+	          "attr": {
+	            "display": function () {return this.displayRefresh}
+	          },
+	          "children": [
+	            {
+	              "type": "loading-indicator",
+	              "style": {
+	                "width": 100,
+	                "height": 100,
+	                "color": "#808080"
+	              }
+	            },
+	            {
+	              "type": "text",
+	              "style": {
+	                "marginLeft": 10,
+	                "color": "#000000"
+	              },
+	              "attr": {
+	                "value": function () {return this.refreshstr}
+	              }
+	            }
+	          ]
+	        },
+	        {
+	          "type": "cell",
+	          "append": "tree",
+	          "classList": [
+	            "header"
+	          ],
+	          "style": {
+	            "backgroundColor": "#FFFFFF"
+	          },
+	          "children": [
+	            {
+	              "type": "lhb-bhslider",
+	              "attr": {
+	                "autoplay": "true"
+	              }
+	            },
+	            {
+	              "type": "lhb-bhkindbuttons"
+	            }
+	          ]
+	        },
+	        {
+	          "type": "cell",
+	          "append": "tree",
+	          "children": [
+	            {
+	              "type": "lhb-bhprofile"
+	            }
+	          ]
+	        },
+	        {
+	          "type": "cell",
+	          "append": "tree",
+	          "children": [
+	            {
+	              "type": "div",
+	              "style": {
+	                "flexDirection": "row",
+	                "marginTop": 15,
+	                "borderBottomWidth": 1,
+	                "borderBottomColor": "#D3D3D3",
+	                "paddingBottom": 15,
+	                "alignItems": "center"
+	              },
+	              "children": [
+	                {
+	                  "type": "image",
+	                  "attr": {
+	                    "src": "http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/buiness_gaikuang_logo.png"
+	                  },
+	                  "style": {
+	                    "width": 30,
+	                    "height": 30,
+	                    "marginLeft": 20
+	                  }
+	                },
+	                {
+	                  "type": "text",
+	                  "style": {
+	                    "marginLeft": 10,
+	                    "fontSize": 30,
+	                    "color": "#808080"
+	                  },
+	                  "attr": {
+	                    "value": "任务管理"
+	                  }
+	                },
+	                {
+	                  "type": "text",
+	                  "style": {
+	                    "fontSize": 22,
+	                    "marginLeft": 40,
+	                    "color": "#808080"
+	                  },
+	                  "attr": {
+	                    "value": "电脑登录www.lihuobao.cn获取更多权限"
+	                  }
+	                }
+	              ]
+	            }
+	          ]
+	        },
+	        {
+	          "type": "cell",
+	          "append": "tree",
+	          "children": [
+	            {
+	              "type": "lhb-bhcell"
+	            }
+	          ]
+	        },
+	        {
+	          "type": "cell",
+	          "append": "tree",
+	          "children": [
+	            {
+	              "type": "lhb-bhcell"
+	            }
+	          ]
+	        },
+	        {
+	          "type": "cell",
+	          "append": "tree",
+	          "children": [
+	            {
+	              "type": "lhb-bhcell"
+	            }
+	          ]
+	        }
+	      ]
+	    }
+	  ]
+	})
+	;__weex_module__.exports.style = __weex_module__.exports.style || {}
+	;Object.assign(__weex_module__.exports.style, {
+	  "refresh": {
+	    "display": "flex",
+	    "alignItems": "center",
+	    "justifyContent": "center",
+	    "flexDirection": "row",
+	    "width": 750,
+	    "height": 100
+	  }
+	})
+	})
+	;__weex_bootstrap__("@weex-component/9d85bb126b62295b2ef9db79f09ef056", {
+	  "transformerVersion": "0.3.1"
+	},undefined)
+
+/***/ },
+/* 1 */
+/***/ function(module, exports) {
+
+	;__weex_define__("@weex-component/lhb-bhslider", [], function(__weex_require__, __weex_exports__, __weex_module__){
+
+	;
+
+	  var eventModule = __weex_require__('@weex-module/requestevent'); 
+	  var clickModule = __weex_require__('@weex-module/didclickevent');
+	  var stream = __weex_require__('@weex-module/stream');
+
+	  //var pictureurl="http://oss.aliyuncs.com/testossimg/";//oss上banner图片前缀
+	  var pictureurl="http://oss.aliyuncs.com/mingstatic/";
+
+	  __weex_module__.exports={
+	      data:function () {return {
+	        autoplay:'',
+	      	indicatormargintop:"230",
+	      	autoplay:'',   
+	        items:[],
+	        version:'133'
+	      }},
+	      methods:{
+	        
+	        getbannerimage:function(image){
+	          return pictureurl+image;
+	        },
+	        
+	        clickbanner:function(e){
+	             
+	             clickModule.didClickEvent(e);
+
+	         }
+	      },
+
+	      ready:function(){
+	      var self = this;
+	      eventModule.getHomeDatas(function(ret){ 
+
+	        var positionStr = "home_admin";//可能的值：home:用户端首页, home_admin:商户端首页，question:任务展示列表-学习列表, share:任务展示列表-分享列表, ticket:任务展示列表-小票列表, job:任务展示列表-理货列表, scoremall:积分商城, appsign:签到
+	        //nativeLog("ret:--------"+ret.uid+ret.sid+ret._t);
+	        //var GET_URL_MobileBanner = 'http://1525sg4410.51mypc.cn/mingop.php?m=getMobileBanner';//开发环境
+	        //var GET_URL_MobileBanner = 'http://xiaomingtiyan.imwork.net/mingop.php?m=getMobileBanner';//体验环境
+	        var GET_URL_MobileBanner = 'http://ming.lihuobao.cn/mingop.php?m=getMobileBanner';//正式环境
+	        var BODY_URL='uid='+ret.uid+'&'+'sid='+ret.sid+'&'+'_t='+ret._t+'&platform=2&version='+self.version+'&position='+positionStr;
+
+	        stream.fetch({
+	          method: 'POST',
+	          url: GET_URL_MobileBanner,
+	          body:BODY_URL,
+	          type:'json'
+	        }, function(ret) {
+	          if(!ret.ok){
+	            
+	          }else{
+	            //console.log('get:'+JSON.stringify(ret.data));
+	            var dic = ret.data;//转为json对象
+	            self.items= dic.list;
+	          }
+	        },function(response){
+
+	          //console.log('get in progress:'+response.length);
+
+	        });
+
+
+	       });
+	  }
+	      
+	  }
+
+	;__weex_module__.exports.template = __weex_module__.exports.template || {}
+	;Object.assign(__weex_module__.exports.template, {
+	  "type": "slider",
+	  "classList": [
+	    "slider"
+	  ],
+	  "attr": {
+	    "autoPlay": function () {return this.autoplay}
+	  },
+	  "children": [
+	    {
+	      "type": "div",
+	      "classList": [
+	        "slider-pages"
+	      ],
+	      "repeat": {
+	        "expression": function () {return this.items},
+	        "value": "row"
+	      },
+	      "children": [
+	        {
+	          "type": "image",
+	          "classList": [
+	            "image"
+	          ],
+	          "attr": {
+	            "src": function () {return this.getbannerimage(this.row.image)}
+	          },
+	          "events": {
+	            "click": function ($event) {this.clickbanner(this.row,$event)}
+	          }
+	        }
+	      ]
+	    },
+	    {
+	      "type": "indicator",
+	      "classList": [
+	        "indicator"
+	      ],
+	      "style": {
+	        "marginTop": function () {return this.indicatormargintop}
+	      }
+	    }
+	  ]
+	})
+	;__weex_module__.exports.style = __weex_module__.exports.style || {}
+	;Object.assign(__weex_module__.exports.style, {
+	  "slider": {
+	    "flexDirection": "row",
+	    "width": 750,
+	    "height": 290
+	  },
+	  "slider-pages": {
+	    "flexDirection": "row",
+	    "width": 750,
+	    "height": 290
+	  },
+	  "image": {
+	    "width": 750,
+	    "height": 290
+	  },
+	  "indicator": {
+	    "width": 750,
+	    "height": 80,
+	    "position": "absolute",
+	    "top": 1,
+	    "left": 1,
+	    "itemColor": "white",
+	    "itemSelectedColor": "rgb(248,207,52)",
+	    "itemSize": 20
+	  }
+	})
+	})
+
+/***/ },
+/* 2 */
+/***/ function(module, exports, __webpack_require__) {
+
+	;__weex_define__("@weex-component/lhb-bhkindbuttons", [], function(__weex_require__, __weex_exports__, __weex_module__){
+
+
+	;
+
+		__webpack_require__(3);
+
+	  
+
+	    __weex_module__.exports={
+	        data:function () {return {
+	            buttons:[
+	              {iconurl:'http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/buiness_lihuo_log@2x.png',icontitle:'拍一拍',number:0,width:80},
+	              {iconurl:'http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/buiness_sharpiao_log@2x.png',icontitle:'做调研',number:1,width:100},
+	              {iconurl:'http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/buiness_saoma_log@2x.png',icontitle:'扫码',number:2,width:80}
+	            ]
+	        }}
+	        
+
+	     
+
+	    }
+
+	;__weex_module__.exports.template = __weex_module__.exports.template || {}
+	;Object.assign(__weex_module__.exports.template, {
+	  "type": "div",
+	  "children": [
+	    {
+	      "type": "div",
+	      "classList": [
+	        "kind"
+	      ],
+	      "style": {
+	        "flexDirection": "row"
+	      },
+	      "children": [
+	        {
+	          "type": "lhb-hbbutton",
+	          "classList": [
+	            "smallkind"
+	          ],
+	          "attr": {
+	            "iconurl": function () {return this.btn.iconurl},
+	            "icontitle": function () {return this.btn.icontitle},
+	            "btnnumber": function () {return this.btn.number},
+	            "btnwidth": function () {return this.btn.width}
+	          },
+	          "repeat": {
+	            "expression": function () {return this.buttons},
+	            "value": "btn"
+	          }
+	        }
+	      ]
+	    },
+	    {
+	      "type": "div",
+	      "classList": [
+	        "line"
+	      ],
+	      "style": {
+	        "flexDirection": "row"
+	      },
+	      "children": [
+	        {
+	          "type": "text"
+	        }
+	      ]
+	    }
+	  ]
+	})
+	;__weex_module__.exports.style = __weex_module__.exports.style || {}
+	;Object.assign(__weex_module__.exports.style, {
+	  "kind": {
+	    "flexDirection": "row",
+	    "width": 750
+	  },
+	  "smallkind": {
+	    "flex": 1,
+	    "marginTop": 16
+	  },
+	  "line": {
+	    "marginTop": 15,
+	    "width": 750,
+	    "height": 10,
+	    "backgroundColor": "rgb(237,237,237)"
+	  }
+	})
+	})
+
+/***/ },
+/* 3 */
+/***/ function(module, exports) {
+
+	;__weex_define__("@weex-component/lhb-hbbutton", [], function(__weex_require__, __weex_exports__, __weex_module__){
+
+	;
+
+	  var clickbtnModule = __weex_require__('@weex-module/didclickevent');
+
+		__weex_module__.exports={
+	      data:function () {return {
+	         btnnumber:0,
+	         iconurl:'',
+	         icontitle:'',
+	         btnwidth:80,
+	         btnradius:0,
+	         btnheight:80,
+	         titlecolor:'grey'
+	     }},
+	     methods:{
+	        
+	        clickkindbtn:function(e){
+	             
+
+	             clickbtnModule.didClickKindBtn(e);
+
+	         }
+	      }
+	  }
+
+	;__weex_module__.exports.template = __weex_module__.exports.template || {}
+	;Object.assign(__weex_module__.exports.template, {
+	  "type": "div",
+	  "style": {
+	    "flexDirection": "column",
+	    "alignItems": "center"
+	  },
+	  "events": {
+	    "click": function ($event) {this.clickkindbtn(this.btnnumber,$event)}
+	  },
+	  "children": [
+	    {
+	      "type": "image",
+	      "classList": [
+	        "iconimage"
+	      ],
+	      "attr": {
+	        "src": function () {return this.iconurl}
+	      },
+	      "style": {
+	        "width": function () {return this.btnwidth},
+	        "height": function () {return this.btnheight},
+	        "borderRadius": function () {return this.btnradius}
+	      }
+	    },
+	    {
+	      "type": "text",
+	      "classList": [
+	        "icontitle"
+	      ],
+	      "style": {
+	        "color": function () {return this.titlecolor}
+	      },
+	      "attr": {
+	        "value": function () {return this.icontitle}
+	      }
+	    }
+	  ]
+	})
+	;__weex_module__.exports.style = __weex_module__.exports.style || {}
+	;Object.assign(__weex_module__.exports.style, {
+	  "icontitle": {
+	    "marginTop": 10,
+	    "fontSize": 24
+	  }
+	})
+	})
+
+/***/ },
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	;__weex_define__("@weex-component/lhb-bhprofile", [], function(__weex_require__, __weex_exports__, __weex_module__){
+
+	;
+		
+		__webpack_require__(5);
+
+
+
+	;__weex_module__.exports.template = __weex_module__.exports.template || {}
+	;Object.assign(__weex_module__.exports.template, {
+	  "type": "div",
+	  "children": [
+	    {
+	      "type": "jwy-groupbutton",
+	      "attr": {
+	        "groupiconurl": "http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/buiness_gaikuang_logo.png",
+	        "grouptitle": "概况"
+	      },
+	      "style": {
+	        "borderBottomWidth": 1,
+	        "borderBottomColor": "#D3D3D3"
+	      }
+	    },
+	    {
+	      "type": "div",
+	      "style": {
+	        "flexDirection": "column",
+	        "borderBottomWidth": 10,
+	        "borderBottomColor": "rgb(237,237,237)",
+	        "paddingBottom": 10
+	      },
+	      "children": [
+	        {
+	          "type": "div",
+	          "style": {
+	            "flexDirection": "row"
+	          },
+	          "children": [
+	            {
+	              "type": "div",
+	              "classList": [
+	                "label"
+	              ],
+	              "children": [
+	                {
+	                  "type": "text",
+	                  "style": {
+	                    "color": "#808080",
+	                    "fontSize": 28
+	                  },
+	                  "attr": {
+	                    "value": "费用合计"
+	                  }
+	                },
+	                {
+	                  "type": "text",
+	                  "classList": [
+	                    "numberlabel"
+	                  ],
+	                  "attr": {
+	                    "value": "0"
+	                  }
+	                }
+	              ]
+	            },
+	            {
+	              "type": "div",
+	              "classList": [
+	                "label"
+	              ],
+	              "children": [
+	                {
+	                  "type": "text",
+	                  "style": {
+	                    "color": "#808080",
+	                    "fontSize": 28
+	                  },
+	                  "attr": {
+	                    "value": "参与人数"
+	                  }
+	                },
+	                {
+	                  "type": "text",
+	                  "classList": [
+	                    "numberlabel"
+	                  ],
+	                  "attr": {
+	                    "value": "0"
+	                  }
+	                }
+	              ]
+	            }
+	          ]
+	        },
+	        {
+	          "type": "div",
+	          "style": {
+	            "flexDirection": "row"
+	          },
+	          "children": [
+	            {
+	              "type": "div",
+	              "classList": [
+	                "label"
+	              ],
+	              "children": [
+	                {
+	                  "type": "text",
+	                  "style": {
+	                    "color": "#808080",
+	                    "fontSize": 28
+	                  },
+	                  "attr": {
+	                    "value": "完成人数"
+	                  }
+	                },
+	                {
+	                  "type": "text",
+	                  "classList": [
+	                    "numberlabel"
+	                  ],
+	                  "attr": {
+	                    "value": "0"
+	                  }
+	                }
+	              ]
+	            },
+	            {
+	              "type": "div",
+	              "classList": [
+	                "label"
+	              ],
+	              "children": [
+	                {
+	                  "type": "text",
+	                  "style": {
+	                    "color": "#808080",
+	                    "fontSize": 28
+	                  },
+	                  "attr": {
+	                    "value": "完成比例"
+	                  }
+	                },
+	                {
+	                  "type": "text",
+	                  "classList": [
+	                    "numberlabel"
+	                  ],
+	                  "attr": {
+	                    "value": "0%"
+	                  }
+	                }
+	              ]
+	            }
+	          ]
+	        }
+	      ]
+	    }
+	  ]
+	})
+	;__weex_module__.exports.style = __weex_module__.exports.style || {}
+	;Object.assign(__weex_module__.exports.style, {
+	  "label": {
+	    "flexDirection": "column",
+	    "flex": 1,
+	    "alignItems": "center",
+	    "paddingTop": 17
+	  },
+	  "numberlabel": {
+	    "marginTop": 10,
+	    "color": "#FFA500",
+	    "fontSize": 28
+	  }
+	})
+	})
+
+/***/ },
+/* 5 */
+/***/ function(module, exports) {
+
+	;__weex_define__("@weex-component/jwy-groupbutton", [], function(__weex_require__, __weex_exports__, __weex_module__){
+
+	;
+		__weex_module__.exports={
+	      data:function () {return {
+	         groupiconurl:'',
+	         grouptitle:'',
+	         fontcolor:'grey'
+	     }}
+	  }
+
+	;__weex_module__.exports.template = __weex_module__.exports.template || {}
+	;Object.assign(__weex_module__.exports.template, {
+	  "type": "div",
+	  "classList": [
+	    "group"
+	  ],
+	  "children": [
+	    {
+	      "type": "image",
+	      "style": {
+	        "marginLeft": 20,
+	        "width": 30,
+	        "height": 30
+	      },
+	      "attr": {
+	        "src": function () {return this.groupiconurl}
+	      }
+	    },
+	    {
+	      "type": "text",
+	      "style": {
+	        "fontSize": 30,
+	        "color": function () {return this.fontcolor},
+	        "marginLeft": 10
+	      },
+	      "attr": {
+	        "value": function () {return this.grouptitle}
+	      }
+	    }
+	  ]
+	})
+	;__weex_module__.exports.style = __weex_module__.exports.style || {}
+	;Object.assign(__weex_module__.exports.style, {
+	  "group": {
+	    "flexDirection": "row",
+	    "alignItems": "center",
+	    "marginTop": 15,
+	    "paddingBottom": 15
+	  }
+	})
+	})
+
+/***/ },
+/* 6 */
+/***/ function(module, exports) {
+
+	;__weex_define__("@weex-component/lhb-bhcell", [], function(__weex_require__, __weex_exports__, __weex_module__){
+
+	;__weex_module__.exports.template = __weex_module__.exports.template || {}
+	;Object.assign(__weex_module__.exports.template, {
+	  "type": "div",
+	  "children": [
+	    {
+	      "type": "div",
+	      "style": {
+	        "flexDirection": "column"
+	      },
+	      "children": [
+	        {
+	          "type": "div",
+	          "classList": [
+	            "titlecell"
+	          ],
+	          "children": [
+	            {
+	              "type": "image",
+	              "attr": {
+	                "src": "http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/home_list_task@2x.png"
+	              },
+	              "style": {
+	                "width": 100,
+	                "height": 100,
+	                "marginLeft": 20
+	              }
+	            },
+	            {
+	              "type": "div",
+	              "style": {
+	                "flexDirection": "column",
+	                "marginLeft": 20
+	              },
+	              "children": [
+	                {
+	                  "type": "text",
+	                  "style": {
+	                    "fontSize": 28,
+	                    "marginBottom": 10,
+	                    "color": "#808080"
+	                  },
+	                  "attr": {
+	                    "value": "清宫时发生的发生拍照赚改革"
+	                  }
+	                },
+	                {
+	                  "type": "text",
+	                  "style": {
+	                    "fontSize": 26,
+	                    "color": "#A9A9A9"
+	                  },
+	                  "attr": {
+	                    "value": "剩余任务:22"
+	                  }
+	                }
+	              ]
+	            },
+	            {
+	              "type": "image",
+	              "attr": {
+	                "src": "http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/cell_drop_down.png"
+	              },
+	              "style": {
+	                "width": 25,
+	                "height": 15,
+	                "position": "absolute",
+	                "right": 20,
+	                "bottom": 15
+	              }
+	            }
+	          ]
+	        },
+	        {
+	          "type": "div",
+	          "classList": [
+	            "detailcell"
+	          ],
+	          "children": [
+	            {
+	              "type": "div",
+	              "style": {
+	                "marginLeft": 20
+	              },
+	              "children": [
+	                {
+	                  "type": "div",
+	                  "style": {
+	                    "flexDirection": "row",
+	                    "padding": 10
+	                  },
+	                  "children": [
+	                    {
+	                      "type": "div",
+	                      "classList": [
+	                        "textbox"
+	                      ],
+	                      "children": [
+	                        {
+	                          "type": "text",
+	                          "classList": [
+	                            "textstr"
+	                          ],
+	                          "attr": {
+	                            "value": "发布时间："
+	                          }
+	                        },
+	                        {
+	                          "type": "text",
+	                          "classList": [
+	                            "textstr"
+	                          ],
+	                          "attr": {
+	                            "value": "2016.08.01"
+	                          }
+	                        }
+	                      ]
+	                    },
+	                    {
+	                      "type": "div",
+	                      "classList": [
+	                        "textbox"
+	                      ],
+	                      "children": [
+	                        {
+	                          "type": "text",
+	                          "classList": [
+	                            "textstr"
+	                          ],
+	                          "attr": {
+	                            "value": "任务类型："
+	                          }
+	                        },
+	                        {
+	                          "type": "text",
+	                          "classList": [
+	                            "textstr"
+	                          ],
+	                          "attr": {
+	                            "value": "保修卡调研"
+	                          }
+	                        }
+	                      ]
+	                    }
+	                  ]
+	                },
+	                {
+	                  "type": "div",
+	                  "style": {
+	                    "flexDirection": "row",
+	                    "padding": 10
+	                  },
+	                  "children": [
+	                    {
+	                      "type": "div",
+	                      "classList": [
+	                        "textbox"
+	                      ],
+	                      "children": [
+	                        {
+	                          "type": "text",
+	                          "classList": [
+	                            "textstr"
+	                          ],
+	                          "attr": {
+	                            "value": "费用合计："
+	                          }
+	                        },
+	                        {
+	                          "type": "text",
+	                          "classList": [
+	                            "textstr"
+	                          ],
+	                          "attr": {
+	                            "value": "¥ 25.0"
+	                          }
+	                        }
+	                      ]
+	                    },
+	                    {
+	                      "type": "div",
+	                      "classList": [
+	                        "textbox"
+	                      ],
+	                      "children": [
+	                        {
+	                          "type": "text",
+	                          "classList": [
+	                            "textstr"
+	                          ],
+	                          "attr": {
+	                            "value": "单盒赏金："
+	                          }
+	                        },
+	                        {
+	                          "type": "text",
+	                          "classList": [
+	                            "textstr"
+	                          ],
+	                          "attr": {
+	                            "value": "5.0金币"
+	                          }
+	                        }
+	                      ]
+	                    }
+	                  ]
+	                },
+	                {
+	                  "type": "div",
+	                  "style": {
+	                    "flexDirection": "row",
+	                    "padding": 10
+	                  },
+	                  "children": [
+	                    {
+	                      "type": "div",
+	                      "classList": [
+	                        "textbox"
+	                      ],
+	                      "children": [
+	                        {
+	                          "type": "text",
+	                          "classList": [
+	                            "textstr"
+	                          ],
+	                          "attr": {
+	                            "value": "任务盒数："
+	                          }
+	                        },
+	                        {
+	                          "type": "text",
+	                          "classList": [
+	                            "textstr"
+	                          ],
+	                          "attr": {
+	                            "value": "5"
+	                          }
+	                        }
+	                      ]
+	                    },
+	                    {
+	                      "type": "div",
+	                      "classList": [
+	                        "textbox"
+	                      ],
+	                      "children": [
+	                        {
+	                          "type": "text",
+	                          "classList": [
+	                            "textstr"
+	                          ],
+	                          "attr": {
+	                            "value": "参与人数："
+	                          }
+	                        },
+	                        {
+	                          "type": "text",
+	                          "classList": [
+	                            "textstr"
+	                          ],
+	                          "attr": {
+	                            "value": "0"
+	                          }
+	                        }
+	                      ]
+	                    }
+	                  ]
+	                },
+	                {
+	                  "type": "div",
+	                  "style": {
+	                    "flexDirection": "row",
+	                    "padding": 10
+	                  },
+	                  "children": [
+	                    {
+	                      "type": "div",
+	                      "classList": [
+	                        "textbox"
+	                      ],
+	                      "children": [
+	                        {
+	                          "type": "text",
+	                          "classList": [
+	                            "textstr"
+	                          ],
+	                          "attr": {
+	                            "value": "晒票盒数："
+	                          }
+	                        },
+	                        {
+	                          "type": "text",
+	                          "classList": [
+	                            "textstr"
+	                          ],
+	                          "attr": {
+	                            "value": "0"
+	                          }
+	                        }
+	                      ]
+	                    },
+	                    {
+	                      "type": "div",
+	                      "classList": [
+	                        "textbox"
+	                      ],
+	                      "children": [
+	                        {
+	                          "type": "text",
+	                          "classList": [
+	                            "textstr"
+	                          ],
+	                          "attr": {
+	                            "value": "成功率："
+	                          }
+	                        },
+	                        {
+	                          "type": "text",
+	                          "classList": [
+	                            "textstr"
+	                          ],
+	                          "attr": {
+	                            "value": "0%"
+	                          }
+	                        }
+	                      ]
+	                    }
+	                  ]
+	                },
+	                {
+	                  "type": "div",
+	                  "style": {
+	                    "flexDirection": "row",
+	                    "padding": 10,
+	                    "alignItems": "center"
+	                  },
+	                  "children": [
+	                    {
+	                      "type": "image",
+	                      "attr": {
+	                        "src": "http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/gouxuanBtn.png"
+	                      },
+	                      "style": {
+	                        "width": 28,
+	                        "height": 28
+	                      }
+	                    },
+	                    {
+	                      "type": "text",
+	                      "classList": [
+	                        "textstr"
+	                      ],
+	                      "attr": {
+	                        "value": "公开围观"
+	                      }
+	                    },
+	                    {
+	                      "type": "text",
+	                      "style": {
+	                        "marginLeft": 20,
+	                        "color": "#0000FF",
+	                        "borderColor": "#0000FF",
+	                        "borderBottomWidth": 2,
+	                        "fontSize": 24
+	                      },
+	                      "attr": {
+	                        "value": "查看围观详情"
+	                      }
+	                    }
+	                  ]
+	                }
+	              ]
+	            }
+	          ]
+	        },
+	        {
+	          "type": "div",
+	          "classList": [
+	            "buttoncell"
+	          ],
+	          "children": [
+	            {
+	              "type": "div",
+	              "classList": [
+	                "button"
+	              ],
+	              "style": {
+	                "flex": 1,
+	                "alignItems": "center",
+	                "borderRightWidth": 2,
+	                "borderColor": "rgb(237,237,237)"
+	              },
+	              "children": [
+	                {
+	                  "type": "div",
+	                  "classList": [
+	                    "buttonbox"
+	                  ],
+	                  "children": [
+	                    {
+	                      "type": "image",
+	                      "attr": {
+	                        "src": "http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/home_add_logo@2x.png"
+	                      },
+	                      "style": {
+	                        "width": 30,
+	                        "height": 30
+	                      }
+	                    },
+	                    {
+	                      "type": "text",
+	                      "classList": [
+	                        "buttontext"
+	                      ],
+	                      "attr": {
+	                        "value": "追加"
+	                      }
+	                    }
+	                  ]
+	                }
+	              ]
+	            },
+	            {
+	              "type": "div",
+	              "classList": [
+	                "button"
+	              ],
+	              "style": {
+	                "flex": 1,
+	                "alignItems": "center"
+	              },
+	              "children": [
+	                {
+	                  "type": "div",
+	                  "classList": [
+	                    "buttonbox"
+	                  ],
+	                  "children": [
+	                    {
+	                      "type": "image",
+	                      "attr": {
+	                        "src": "http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/home_audit_logo@2x.png"
+	                      },
+	                      "style": {
+	                        "width": 30,
+	                        "height": 30
+	                      }
+	                    },
+	                    {
+	                      "type": "text",
+	                      "classList": [
+	                        "buttontext"
+	                      ],
+	                      "attr": {
+	                        "value": "审核"
+	                      }
+	                    }
+	                  ]
+	                }
+	              ]
+	            }
+	          ]
+	        }
+	      ]
+	    }
+	  ]
+	})
+	;__weex_module__.exports.style = __weex_module__.exports.style || {}
+	;Object.assign(__weex_module__.exports.style, {
+	  "titlecell": {
+	    "flexDirection": "row",
+	    "position": "relative",
+	    "borderBottomColor": "rgb(237,237,237)",
+	    "borderBottomWidth": 1,
+	    "paddingTop": 16,
+	    "paddingBottom": 16,
+	    "alignItems": "center"
+	  },
+	  "textbox": {
+	    "flexDirection": "row",
+	    "flex": 1,
+	    "alignItems": "center"
+	  },
+	  "textstr": {
+	    "color": "#808080",
+	    "fontSize": 24
+	  },
+	  "detailcell": {
+	    "borderBottomWidth": 1,
+	    "borderBottomColor": "rgb(237,237,237)"
+	  },
+	  "buttoncell": {
+	    "borderBottomColor": "rgb(237,237,237)",
+	    "borderBottomWidth": 10,
+	    "flexDirection": "row",
+	    "padding": 10
+	  },
+	  "buttonbox": {
+	    "flexDirection": "row",
+	    "backgroundColor": "#FFA500",
+	    "width": 180,
+	    "height": 50,
+	    "alignItems": "center",
+	    "justifyContent": "center",
+	    "borderRadius": 8,
+	    "padding": 6
+	  },
+	  "buttontext": {
+	    "color": "#FFFFFF",
+	    "fontSize": 26,
+	    "marginLeft": 8
+	  }
+	})
+	})
+
+/***/ }
+/******/ ]);

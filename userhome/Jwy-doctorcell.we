@@ -1,0 +1,188 @@
+<template>
+	<div style="flex-direction:column">
+		<jwy-groupbutton groupiconurl="http://testossimg.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/doctors_Icon.png" grouptitle="精品课程"></jwy-groupbutton>
+		<div class="docitems">
+		    <div style="position:relative">
+		    	<img src="{{getMainImage(row.task_id)}}" style="width:710;height:400;flex:5;margin-left:10;margin-right:10;"></img>
+		    	<Jwy-imagelabel labeltitle="{{getVideoTime(row.video_length)}}" imgurl="{{docflagimage}}" style="position:absolute;right:40;top:15;" fontcolor="white"></Jwy-imagelabel>
+		    </div>
+			<div style="margin-left:20;flex-direction:row;flex:1;align-items:center;">
+				<text class="smalldoctype" style="background-color:{{getTypeColor(row.categorylevel3_id)}};">{{getType(row.categorylevel3_id)}}</text>
+				<text style="color:grey;font-size:28;margin-left:20;">{{getStartTime(row.starttime)}}</text>
+			</div>
+			<div style="margin-left:20;flex-direction:row;flex:1;align-items:center;">
+				<text  class="doctitle">{{row.name}}</text>
+				<text  class="docflag" if="{{isShowFlag(row.listtag)}}">{{getFlag(row.listtag)}}</text>
+			</div>
+			<text  class="doccontent">{{row.content}}</text>
+			<div style="background-color:rgb(237,237,237);flex-direction:row;flex:1;">
+			  <div class="lookernumber" style="border-right-color:lightgrey;border-right-width:2;">
+			  	<text style="color:black;font-size:26;text-align:center;">{{!!row.participants? row.participants:'0'}}人观看</text>
+			  </div>
+			  <div class="lookernumber" style="border-left-color:lightgrey;border-left-width:2;flex-direction:row;" >
+			  	<text style="color:black;font-size:26;text-align:center;">满意度</text>
+			  	<Jwy-starstar num="{{row.star}}" style="margin-left:20;"></Jwy-starstar>
+			  </div>	
+			</div>
+		</div>
+	</div>
+</template>
+
+<style>
+	.docitems{
+		padding-bottom:10;
+		border-width:1;
+		border-color:rgb(235,235,235);
+		flex-direction:column;
+		width:730;
+		height:700;
+		margin-left:10;
+		margin-right:10;
+		margin-top: 8;
+	}
+	.doctitle{
+        max-width:500;
+        font-size:34;
+        color:black;
+        text-overflow:ellipsis;
+        lines:1;
+	}
+	.docflag{
+		width:60;
+		height:26;
+		margin-left:20;
+		background-color: red;
+		border-radius: 13;
+		font-size: 20;
+		text-align:center;
+		justify-content:center;
+		padding: 3;
+		color:white;
+	}
+	.doccontent{
+		margin-left:20;
+		width:670;
+		font-size:28;
+		color:grey;
+		flex:1;
+		text-overflow:ellipsis;
+		lines:2;
+	}
+	.smalldoctype{
+		
+		width:160;
+		font-size:28;
+		color:white;
+		text-align:center;
+		border-radius:6;
+		justify-content:center;
+		height: 44;
+		padding: 8;
+	}
+	.lookernumber{
+		flex:1;
+		justify-content:center;
+		align-items: center;
+	}
+</style>
+
+<script>
+	require("./Jwy-imagelabel.we");
+	require("./Jwy-starstar.we");
+
+	//var iconimageurl='http://oss.aliyuncs.com/testossimg/image/task_list_thumb/';//答题图片前缀
+	//var iconimageurl='http://oss.aliyuncs.com/exposs/image/task_list_thumb/';
+	//var iconimageurl='http://oss.aliyuncs.com/mingstatic/image/task_list_thumb/';
+	
+    var typemap={
+        
+        11011:'感冒疾病',
+        11012:'皮肤疾病',
+        11013:'慢性疾病',
+        11014:'儿童疾病',
+        11015:'妇科疾病',
+        11016:'五官疾病',
+        11017:'消化系统'
+    };
+    var typecolormap={
+    	11011:'rgb(235,120,85)',
+        11012:'rgb(169,212,113)',
+        11013:'rgb(247,206,89)',
+        11014:'rgb(110,160,239)',
+        11015:'rgb(224,123,251)',
+        11016:'rgb(185,166,238)',
+        11017:'rgb(131,215,243)'
+    }
+	module.exports = {
+       
+       data:{
+       	 environment:'',
+       	 row:{},
+       	 color:'orange',
+       	 doctime:'2016.07.06',
+       	 docflagimage:'http://testossimg.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/doc_videoIcon.png'
+       },
+       methods:{
+             
+             getMainImage:function(tid){
+
+                 return 'http://oss.aliyuncs.com/'+this.environment+'/image/task_list_thumb/' + tid;
+             },
+             getType:function(type){
+
+             	 return typemap[type];
+             },
+             getTypeColor:function(type){
+                 
+                 return typecolormap[type];
+
+             },
+             getStartTime:function(starttime){
+             	var date = new Date(starttime*1000); 
+             	//date.setTime(starttime*1000);
+             	var year=date.getFullYear(); 
+				var month=date.getMonth()+1; 
+				var date=date.getDate(); 
+                return year+"."+month+"."+date;
+             },
+             getFlag:function(listtag){
+                 var flagstr='';
+                 if (listtag==1) {
+                 	flagstr='new';
+                 }else if (listtag==2) {
+                 	flagstr='hot';
+                 }else if (listtag==3) {
+                 	flagstr='精品';
+                 }else{
+
+                 }
+                 return flagstr;
+             },
+             isShowFlag:function(listtag){
+                  if (listtag==1 || listtag==2 || listtag==3) {
+                  	return true;
+                  }else{
+                  	return false;
+                  }
+             },
+             getVideoTime:function(times){
+             	var second=parseInt(times);//秒
+             	var minute=0;//分
+             	var hour=0;//小时
+                if (second>60) {
+                	minute=parseInt(times/60);
+                	second=parseInt(times%60);
+                }
+                if (minute>60) {
+                	hour=parseInt(minute/60);
+                	minute=parseInt(minute%60);
+                }
+             	var timestr=hour+"\'"+minute+"\'"+second+"\"";
+             	if (hour==0) {
+             		timestr=minute+"\'"+second+"\"";
+             	}
+             	return timestr;
+             }
+	  }
+	}
+</script>

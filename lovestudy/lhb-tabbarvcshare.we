@@ -1,0 +1,80 @@
+<template>
+ <div style="background-color:white;width:750;flex-direction:column;">
+  <lhb-studyslider autoplay="true" kindstr="share"></lhb-studyslider>
+  <div style="flex-direction: column;">
+    <lhb-tabbar tab-items = {{tabItems}}></lhb-tabbar>
+  </div>
+ </div> 
+</template>
+
+<script>
+
+  //require('weex-components');
+  require("./lhb-tabbar.we");
+  require("./lhb-studyslider.we")
+
+  module.exports = {
+    data: {
+      dir: 'examples',
+      tabItems: [
+        {
+          index: 0,
+          title: '最新',
+          titleColor: '#000000',
+          icon: '',
+          image: 'http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/button1@3x.png',
+          selectedImage: 'http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/button11@3x.png',
+          src: 'http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/JS_138/lhb-studylist.js?sort=newest&categorylevel1_id=3',
+          visibility: 'visible',
+          selectedColor:'rgb(95,205,255)'
+        },
+        {
+          index: 1,
+          title: '最火',
+          titleColor: '#000000',
+          icon: '',
+          image: 'http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/button2@3x.png',
+          selectedImage: 'http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/button12@3x.png',
+          src: 'http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/JS_138/lhb-studylist.js?sort=hotest&categorylevel1_id=3',
+          visibility: 'hidden',
+          selectedColor:'rgb(250,95,95)'
+        },
+        {
+          index: 2,
+          title: '最赚钱',
+          titleColor: '#000000',
+          icon: '',
+          image: 'http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/button3@3x.png',
+          selectedImage: 'http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/button13@3x.png',
+          src: 'http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/JS_138/lhb-studylist.js?sort=mostmoney&categorylevel1_id=3',
+          visibility: 'hidden',
+          selectedColor:'#ffcc00'
+        },
+        {
+          index: 3,
+          title: '最容易',
+          titleColor: '#000000',
+          icon: '',
+          image: 'http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/button4@3x.png',
+          selectedImage: 'http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/button14@3x.png',
+          src: 'http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/JS_138/lhb-studylist.js?sort=easiest&categorylevel1_id=3',
+          visibility: 'hidden',
+          selectedColor:'rgb(90,215,140)'
+        }
+      ],
+    },
+    created: function() {
+        // var bundleUrl = this.$getConfig().bundleUrl;
+        // console.log('hit', bundleUrl);
+    },
+    methods: {
+      ready: function (e) {
+        var vm = this;
+        vm.$on('tabBar.onClick',function(e){
+          var detail= e.detail;
+          nativeLog('tabBar.onClick ' + detail.index);
+        });
+      },
+    }
+  }
+</script>

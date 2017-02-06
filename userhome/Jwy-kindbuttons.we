@@ -1,0 +1,49 @@
+<template>
+ <div>
+	<div class="kind" style="flex-direction:row;">
+       <jwy-button class="smallkind" iconurl="{{btn.iconurl}}" icontitle="{{btn.icontitle}}" btnnumber="{{btn.number}}" repeat="{{btn in buttons}}"></jwy-button>
+    </div>
+    <div class="line" style="flex-direction:row;">
+      <text></text>
+    </div>
+ </div>   
+</template>
+
+<style>
+	.kind{
+    flex-direction: row;
+    width: 750;
+  }
+  .smallkind{
+    flex:1; 
+    margin-top:16;
+  }
+  .line{
+    margin-top: 15;
+    width: 750;
+    height: 1;
+    background-color: rgb(237,237,237);
+  }
+</style>
+
+<script>
+
+	require("./jwy-button.we");
+
+  
+
+    module.exports={
+        data:{
+            buttons:[
+              {iconurl:'http://testossimg.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/home_list_study@2x.png',icontitle:'爱学习',number:0},
+              {iconurl:'http://testossimg.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/home_list_show@2x.png',icontitle:'做调研',number:1},
+              {iconurl:'http://testossimg.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/home_list_task@2x.png',icontitle:'拍一拍',number:2},
+              {iconurl:'http://testossimg.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/home_list_share@2x.png',icontitle:'勤分享',number:3}
+            ]
+        }
+        
+
+     
+
+    }
+</script>

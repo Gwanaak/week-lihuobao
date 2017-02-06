@@ -1,0 +1,85 @@
+<template>
+	<div class="boxcell">
+		<img src="{{getMainImage(row.task_id)}}" style="width:750;height:400;">
+		<div class="boxrow">
+		   <text class="knowledgelabel">知识竞赛</text>
+		   <text class="textlabel" style="margin-left:20;">{{getStartTime(row.starttime)}}</text>	
+		   <div style="flex-direction:row;margin-left:200;align-items:center;">
+		   	  <img src="{{getRewardImage(row.tiptype_icon_id)}}" style="width: 35;height: 40;">
+		   	  <text class="textlabel" style="margin-left:10;color:red;">{{row.tiptype_icon_text}}</text>
+		   </div>
+		</div>
+		<text class="boxrow" style="font-size:40;">{{row.name}}</text>
+		<div class="boxrow">
+			<text class="textlabel">参与：{{!!row.participants? row.participants:'0'}}</text>
+			<text class="textlabel" style="margin-left:80;">围观：{{!!row.look_count? row.look_count:'0'}}</text>
+		</div>
+	</div>
+</template>
+<style>
+	.boxcell{
+         flex-direction:column;
+         border-bottom-width:12;
+         border-color:rgb(237,237,237);
+         padding-bottom:30;
+	    }
+    .boxrow{
+         flex-direction:row;
+         margin-top:30;
+         margin-left:30;
+         align-items:center;
+    }
+    .knowledgelabel{
+    	color:white;
+    	font-size:27;
+    	border-radius:8;
+    	background-color:rgb(224,123,251);
+    	width:160;
+    	height:44;
+    	text-align: center;
+    	padding: 8;
+    }
+    .textlabel{
+    	color:grey;
+    	font-size:30;
+    }
+
+</style>
+<script>
+    //var iconimageurl='http://oss.aliyuncs.com/testossimg/image/task_list_thumb/';//答题图片前缀
+	//var iconimageurl='http://oss.aliyuncs.com/exposs/image/task_list_thumb/';
+	//var iconimageurl='http://oss.aliyuncs.com/mingstatic/image/task_list_thumb/';
+
+    //var rewardimgurl='http://oss.aliyuncs.com/testossimg/image/tiptype_icon/';//知识竞赛奖励类别icon
+    //var rewardimgurl='http://oss.aliyuncs.com/exposs/image/tiptype_icon/';
+    //var rewardimgurl='http://oss.aliyuncs.com/mingstatic/image/tiptype_icon/';
+
+	module.exports = {
+
+      data:{
+        environment:'',
+       	 row:{}
+       },
+      methods:{
+             
+             getMainImage:function(tid){
+
+                 return 'http://oss.aliyuncs.com/'+this.environment+'/image/task_list_thumb/' + tid;
+             },
+             getRewardImage:function(tiptypeid){
+
+                 return 'http://oss.aliyuncs.com/'+this.environment+'/image/tiptype_icon/' + tiptypeid;
+             },
+             getStartTime:function(starttime){
+             	var date = new Date(starttime*1000); 
+             	//date.setTime(starttime*1000);
+             	var year=date.getFullYear();
+				var month=date.getMonth()+1; 
+				var date=date.getDate(); 
+                return year+"."+month+"."+date;
+             }
+       }
+
+	}
+
+</script>

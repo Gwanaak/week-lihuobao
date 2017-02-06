@@ -1,0 +1,60 @@
+<template>
+	<div class="otherkind" style="flex-direction:row;">
+      <div class="otherkindborder" repeat="{{btn in buttons}}" style="width:{{getnumber(buttons)}}">
+       <brand-button class="othersmallkind" iconurl="{{btn.image}}" icontitle="{{btn.title}}" btndict="{{btn}}" btnradius="1" btnwidth="110" titlecolor="{{btn.color}}"></brand-button>
+      </div>
+  </div>
+</template>
+
+<style>
+  .otherkind{
+    flex-direction: row;
+    width: 750;
+    flex-wrap:wrap;
+    border-bottom-width: 8;
+    /*border-top-width: 0;*/
+    border-color: rgb(237,237,237);
+  }
+  .otherkindborder{
+    /*flex:1; */
+    flex-direction:column;
+    padding-bottom: 16;
+    /*border-width: 0.8;*/
+    
+  }
+  .othersmallkind{
+    /*flex:1; */
+    margin-top:8;
+  }
+</style>
+
+<script>
+  require("./brand-button.we");
+  module.exports={
+        data:{
+            buttons:[
+            
+            {image:'http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/business_tuikuang.png',title:'积分商城'},
+            {image:'http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/business_tuikuang.png',title:'积分商城'},
+             {image:'http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/business_tuikuang.png',title:'积分商城'},
+            {image:'http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/business_tuikuang.png',title:'积分商城'},
+             {image:'http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/business_tuikuang.png',title:'积分商城'},
+            {image:'http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/business_tuikuang.png',title:'积分商城'},
+            {image:'http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/business_tuikuang.png',title:'积分商城'}
+            ]
+        },
+        methods:{
+        
+        getnumber:function(buttons){
+             
+             if (buttons.length<4) {
+             	return 250;
+             }else{
+             	return 187.5;
+             }
+             
+
+         }
+      }
+    }
+</script>  

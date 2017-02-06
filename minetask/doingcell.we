@@ -1,0 +1,211 @@
+<template>
+	<div style="flex-direction:column;width:750;">
+		<div class="cell">
+			<img style="width:160;height:160;" src="{{getIcon(row.task_id)}}"></img>
+			<div style="margin-left:20;flex-direction:column;">
+				<text class="text1">{{row.name}}</text>
+				<text class="text2">{{getType(row.categorylevel2_id)}}</text>
+				<text class="text3">{{getMoney(row.tiptype_id,row.tip,row.score,row.src_container_id)}}</text>
+			</div>
+			<div style="position:absolute;right:50;bottom:20;flex-direction:column;align-items:center;" if="{{sort=='getUserTaskDoing'}}">
+				<text class="text4">剩余{{getlivetime(row.livetime)}}分钟</text>
+				<text class="text5">继续完成</text>
+			</div>
+			<div style="position:absolute;right:50;" if="{{sort=='getUserTaskExamining'}}">
+				<img  style="width:160;height:76;margin-top:40;" src="http://exposs.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/ic_mine_auditing.png">
+			</div>
+			<div style="position:absolute;right:50;" if="{{sort=='getUserTaskPass'}}">
+				<img  style="width:160;height:76;margin-top:40;" src="http://exposs.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/ic_mine_pass.png">
+			</div>
+			<div style="position:absolute;right:50;" if="{{sort=='getUserTaskUnpass'}}">
+				<img  style="width:200;height:80;margin-top:40;" src="{{getUnpassImage(row.categorylevel1_id)}}">
+				<text class="appealtext" style="background-color:{{getbackcolor(row.complain_status)}}" onclick="clickappealbutton(row)">{{row.complain_status==0? '申诉':'已申诉'}}</text>
+			</div>
+		</div>
+		<text style="background-color:rgb(200,200,200);height:1;margin-left:16;"></text>
+	</div>
+</template>
+<style>
+	.cell{
+		flex-direction: row;
+		padding:10;
+	}
+	.text1{
+		margin-top:8;
+		color: rgb(102,102,102);
+		font-size:32;
+	}
+	.text2{
+		margin-top:16;
+		text-align: center;
+    align-items:center;
+    max-width:200;
+    padding:5;
+		font-size:26;
+		border-radius:8;
+		border-width:2;
+		border-color: grey;
+	}
+	.text3{
+    margin-top:16;
+		/*padding:5;*/
+		color: red;
+		font-size:30;
+		font-weight:bold;
+	}
+	.text4{
+		
+		color: red;
+		font-size:27;
+	}
+	.text5{
+		margin-top:10;
+		padding-top:13;
+		padding-left:16;
+		padding-right:16;
+		color: white;
+		font-size:30;
+		background-color:rgb(242,166,59);
+		border-radius:8;
+		height:60;
+	}
+	.appealtext{
+		width:120;
+		height:50;
+		position:absolute;
+		right:-35;
+		bottom:-46;
+		text-align:center;
+    padding-top:9;
+		border-radius:8;
+		color: white;
+	}
+</style>
+<script>
+  var tipunitstr='金币';
+  var eventModule = require('@weex-module/requestevent');
+	var clickModule = require('@weex-module/mytaskevent');
+	var typemap={
+
+      1005:'产品培训',
+      1006:'市场调研',
+      1007:'勤分享',
+      1008:'勤分享',
+      1009:'做调研',
+      1010:'常规调研',
+
+      1311:'疗程用药调研',
+      1312:'联合用药调研',
+      1313:'进货单调研',
+      1314:'保修卡调研',
+
+      1211:'产品知识',
+      1212:'养生常识',
+      1213:'行业资讯',
+      1214:'销售技能',
+      1215:'职场须知',
+
+      110:'与产品合拍',
+      1111:'拍摄货架',
+      1112:'拍摄堆头',
+      1113:'拍摄POP',
+      1114:'拍摄端架',
+      1115:'拍摄橱窗',
+      1116:'拍摄海报',
+      1117:'拍摄价签',
+      1118:'与产品合拍',
+      1119:'拍摄POP',
+      1120:'摄影大赛',
+ };
+	module.exports={
+        data:{
+          scorename:'',
+          environment:'',
+          row:{},
+          sort:'',
+          branddict:{}
+        },
+        ready:function(){
+
+          var self = this;
+          eventModule.getBrandMessage(function(ret){ 
+
+                self.branddict = ret;
+                //nativeLog("ret:+++++++++++"+self.branddict);
+           });
+        },
+        methods:{
+           getUnpassImage:function(categorylevel1_id){
+           	 var iconurl='http://exposs.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/ic_mine_answer_incorrect.png';
+           	 if (categorylevel1_id==1) {
+                 iconurl='http://exposs.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/ic_mine_photo_noclear.png';
+           	 }else if (categorylevel1_id==2) {
+           	 	iconurl='http://exposs.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/ic_mine_answer_incorrect.png';
+           	 }else if (categorylevel1_id==3) {
+           	 	iconurl='http://exposs.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/ic_mine_share_notpass.png';
+           	 }else{
+           	 	iconurl='http://exposs.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/ic_mine_ticket_notpass.png';
+           	 }
+
+           	 return iconurl;
+           },
+           getType:function(type){
+                var typestr=typemap[type];
+                if (typestr) {
+                  return typemap[type];
+                }else{
+                  return '其他';
+                }
+                
+             },
+            getMoney:function(tiptype,tip,score,containerid){
+                  
+                 var brandstr=this.branddict[containerid];
+                 if (brandstr == undefined) {
+                     brandstr='积分';
+                 }
+
+
+                 var tipstr=''; 
+
+                 if (tip==0) {
+                  tipstr=score+brandstr;
+                 }else{
+
+                  if (tiptype==2) {
+                     tipstr='赏' + tip/100.0 + tipunitstr;
+                  }else{
+                     tipstr='赏' + tip/100.0 + '元';
+                  }
+                  
+                 }
+
+                 if (tip==0 && score==0) {
+                  tipstr='赏金 ***';
+                 }
+                 return tipstr;
+             },
+             getIcon:function(task_id){
+             	return 'http://oss.aliyuncs.com/'+this.environment+'/image/task_list_thumb/'+task_id;
+             },
+             getlivetime:function(livetime){
+                 var time=livetime/60+1;
+                 return parseInt(time);
+             },
+             getbackcolor:function(complain_status){
+                 if (complain_status==0) {
+                  return 'rgb(247,206,70)';
+                 }else{
+                  return 'rgb(226,226,226)';
+                 }
+             },
+             clickappealbutton:function(row){
+                 if (row.complain_status==0) {
+                    clickModule.didClickAppealButton(row);
+                 }else{
+
+                 }
+             }
+        }
+    }
+</script>

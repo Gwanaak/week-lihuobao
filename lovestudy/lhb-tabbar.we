@@ -1,0 +1,81 @@
+<template>
+    <div class="wrapper">
+        <div class="tabbar" append = "tree">
+            <lhb-tabbaritem repeat={{tabItems}} index={{index}} icon={{icon}} title={{title}} title-color={{titleColor}}></lhb-tabbaritem>
+        </div>
+        <embed class="content" style="visibility:{{visibility}}" repeat={{tabItems}} src={{src}} type="weex"></embed>
+    </div>
+</template>
+
+<style>
+    .wrapper { 
+        width: 750; 
+        position: absolute; 
+        top: 0; 
+        left: 0; 
+        right: 0; 
+        bottom: 0;
+    }
+    .content { 
+        position: fixed; 
+        top: 0; 
+        left: 0; 
+        right: 0; 
+        bottom: 0; 
+        margin-top: 403;  
+        margin-bottom: 0;
+        background-color: white;
+    }
+    .tabbar { 
+        flex-direction: row; 
+        position: fixed; 
+        top: 263; 
+        left: 0; 
+        right: 0;  
+        height: 140;
+    }
+</style>
+
+<script>
+    require("./lhb-tabbaritem.we");
+
+    module.exports = {
+        data: {
+          tabItems: [ ],
+          selectedIndex: 0,
+          selectedColor: '#ff0000',
+          unselectedColor: '#000000',
+        },
+        created: function () {
+          this.selected(this.selectedIndex);
+
+          this.$on('tabItem.onClick',function(e){
+            var detail= e.detail;
+            this.selectedIndex = detail.index;
+            this.selected(detail.index);
+
+            var params = {
+              index: detail.index
+            };
+            this.$dispatch('tabBar.onClick', params);
+          });
+        },
+        methods: {
+            selected: function(index) {
+              for(var i = 0; i < this.tabItems.length; i++) {
+                var tabItem = this.tabItems[i];
+                if(i == index){
+                  tabItem.icon = tabItem.selectedImage;
+                  tabItem.titleColor = tabItem.selectedColor;
+                  tabItem.visibility = 'visible';
+                }
+                else {
+                  tabItem.icon = tabItem.image;
+                  tabItem.titleColor = this.unselectedColor;
+                  tabItem.visibility = 'hidden';
+                }
+              }
+            },  
+        }
+    }
+</script>

@@ -1,0 +1,166 @@
+<template>
+<div style="background-color:white;width:750;">
+ <list class="list" if="{{isshow!=0}}">
+  <cell class="cell" repeat="{{row in rows}}">
+    <div class="rowcell">
+     <text class="typelabel">{{row.title}}</text>
+     <text class="timelabel">{{gettimes(row.createtime)}}</text>
+     <text class="scorelabel">{{getscore(row.money,row.score,row.unit)}}</text>
+     <!-- <text>grqgrreq</text> -->
+     <text class="line"></text>
+    </div> 
+  </cell>
+  </list>
+  <text class="hintlabel" if="{{isshow==0}}">没有找到纪录哦~</text>
+ </div> 
+</template>
+<style>
+  .hintlabel{
+    position: absolute;
+    top: 400;
+    width:750;
+    height:50;
+    color: black;
+    font-size: 30;
+    font-weight: bold;
+    text-align: center;
+  }
+  .cell{
+    width: 750;
+  }
+  .rowcell{
+    flex-direction: column;
+    margin-left: 20;
+  }
+  .typelabel{
+     font-size: 30;
+     color: black;
+     margin-top:16;
+     /*font-weight:bold;*/
+  }
+  .timelabel{
+     font-size: 26;
+     color: grey;
+     margin-left: 10;
+     margin-top: 16;
+  }
+  .scorelabel{
+    position: absolute;
+    right: 60;
+    top: 34;
+    color: red;
+    font-weight: bold;
+  }
+  .line{
+    margin-top:10;
+    background-color:rgb(210,210,210);
+    height: 1;
+  }
+</style>
+<script>
+
+  var eventModule = require('@weex-module/requestevent'); 
+  var stream = require('@weex-module/stream');
+
+
+  module.exports = {
+      created: function() {
+          var bundleUrl = this.$getConfig().bundleUrl;
+          // console.log('hit', bundleUrl);
+          var sortstr=this.getQueryString(bundleUrl,'sort');
+
+          if (sortstr=='getFortuneOutLog') {
+            this.sort='-';
+          }else{
+            this.sort='+';
+          }
+          
+          // nativeLog("sort:--------"+sortstr+this.titlestr+bundleUrl);
+         
+          this.requestListDatas(sortstr);
+      },
+
+      ready:function(){
+
+          //this.requestHomeDatas();
+      },
+      
+      data: {
+        rows:[],
+        sort:'',
+        isshow:1
+        },
+
+      methods: {
+          requestListDatas:function(sort){
+
+               var self = this;
+               eventModule.getHomeDatas(function(ret){ 
+
+                //nativeLog("ret:--------"+ret.uid+ret.sid+ret._t);
+                var GET_URL_List = ret.main_url+sort;
+                var BODY_URL='user_id='+ret.uid+'&sid='+ret.sid+'&_t='+ret._t+'&platform_id='+ret.platform+'&version='+ret.version+'&container_id='+ret.container_id;
+
+                stream.fetch({
+                  method: 'POST',
+                  url: GET_URL_List,
+                  body:BODY_URL,
+                  type:'json'
+                }, function(ret) {
+                  if(!ret.ok){
+                    //self.test = "request failed";
+                    self.isshow=0;
+                  }else{
+                    //console.log('get:'+JSON.stringify(ret.data));
+                    var dic =ret.data;
+                    //self.test='get:'+JSON.stringify(ret.data);
+
+                    self.rows= dic.list;
+                    var array=dic.list;
+
+                    if (array.length==0) {
+                        self.isshow=0;
+                    }else{
+                        self.isshow=1;
+                    }
+
+                  }
+                },function(response){
+                  // console.log('get in progress:'+response.length);
+                  //self.test = "request failed";
+                  self.isshow=0;
+                });
+
+                  });
+             },
+
+             getQueryString:function(url,name){
+
+                   var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+                   var r = url.split("?")[1].match(reg);
+                   if(r!=null) return unescape(r[2]); return null;
+             },
+             gettimes:function(starttime){
+                  var date = new Date(starttime*1000); 
+              //date.setTime(starttime*1000);
+                var year=date.getFullYear();
+                var month=date.getMonth()+1; 
+                var day=date.getDate();
+                var hour=date.getHours();
+                var minutes=date.getMinutes();
+                return  year+'.'+month+'.'+day+'   '+hour+":"+minutes;
+             },
+             getscore:function(money,score,unit){
+                  var string='';
+                  if (money==0) {
+                    string=this.sort+score+unit;
+                  }else{
+                    string=this.sort+money+unit;
+                  }
+                  return string;
+             }
+
+          }
+   }
+
+</script>

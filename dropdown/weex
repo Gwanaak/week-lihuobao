@@ -1,0 +1,699 @@
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId])
+/******/ 			return installedModules[moduleId].exports;
+
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			exports: {},
+/******/ 			id: moduleId,
+/******/ 			loaded: false
+/******/ 		};
+
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+
+/******/ 		// Flag the module as loaded
+/******/ 		module.loaded = true;
+
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+
+
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(0);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ function(module, exports, __webpack_require__) {
+
+	;__weex_define__("@weex-component/f4a0c85ea1322e4548e66b57251b0cc3", [], function(__weex_require__, __weex_exports__, __weex_module__){
+
+
+	;
+	    __webpack_require__(1);
+
+	    var initData = '[{\"addTime\":\"2016-07-14\",\"questionStatus\":\"2\",\"questionStatusValue\":\"Closed\",\"title\":\"This is a demo\",\"vid\":\"AW5PMSC\"},{\"addTime\":\"2016-07-14\",\"questionStatus\":\"1\",\"questionStatusValue\":\"Waiting\",\"title\":\"This is a demo\",\"vid\":\"AW5PMSM\"},{\"addTime\":\"2016-07-14\",\"questionStatus\":\"2\",\"questionStatusValue\":\"Confirmed\",\"title\":\"This is a demo\",\"vid\":\"AW5PMSA\"}]';
+
+	    __weex_module__.exports = {
+	        data: function () {return {
+	            screenHeight: 0,
+	            // biz
+	            status1: '0',
+	            status2: '1',
+	            status3: '0',
+	            list: []
+	        }},
+	        ready: function () {
+	            this.screenHeight = this.$getConfig().env.deviceHeight ;
+	            this.$on('statuschange', function (e) {
+	                var detail = e.detail;
+	                this.toast({
+	                    message: JSON.stringify(detail)
+	                });
+	                // this.status = detail.id;
+	                this.filter();
+	            }.bind(this));
+	            this.filter();
+	        },
+
+	        methods: {
+	            toast: function (params) {
+	                var modal = __weex_require__('@weex-module/modal');
+	                modal.toast(params);
+	            },
+
+	            filter: function () {
+	                var status = this.status;
+	                this.list = [];
+	                var allList = JSON.parse(initData);
+	                if(status == '0') {
+	                    this.list = allList;
+	                }else {
+	                    this.list = allList.filter(function(item){
+	                        return item.questionStatus == status;
+	                    });
+	                }
+	            }
+	        }
+	    }
+
+	;__weex_module__.exports.template = __weex_module__.exports.template || {}
+	;Object.assign(__weex_module__.exports.template, {
+	  "type": "div",
+	  "classList": [
+	    "wrapper"
+	  ],
+	  "children": [
+	    {
+	      "type": "we-dropdown",
+	      "classList": [
+	        "dropdown"
+	      ],
+	      "attr": {
+	        "statusIda": function () {return this.status1},
+	        "statusIdb": function () {return this.status2},
+	        "statusIdc": function () {return this.status3}
+	      },
+	      "children": [
+	        {
+	          "type": "div",
+	          "style": {
+	            "height": function () {return this.screenHeight}
+	          }
+	        }
+	      ]
+	    }
+	  ]
+	})
+	;__weex_module__.exports.style = __weex_module__.exports.style || {}
+	;Object.assign(__weex_module__.exports.style, {
+	  "dropdown": {
+	    "justifyContent": "center",
+	    "alignContent": "stretch",
+	    "position": "relative",
+	    "zIndex": 100
+	  },
+	  "wrapper": {
+	    "justifyContent": "flex-start",
+	    "flexDirection": "column",
+	    "position": "relative"
+	  },
+	  "list": {
+	    "flex": 1,
+	    "width": 750
+	  },
+	  "refresh-view": {
+	    "height": 120,
+	    "width": 750,
+	    "marginTop": 10,
+	    "marginBottom": 10,
+	    "alignItems": "center",
+	    "justifyContent": "center"
+	  },
+	  "refresh-arrow": {
+	    "fontSize": 30,
+	    "color": "#45b5f0"
+	  },
+	  "indicator": {
+	    "height": 40,
+	    "width": 40,
+	    "color": "#45b5f0"
+	  },
+	  "cell": {
+	    "width": 750,
+	    "paddingTop": 15,
+	    "paddingBottom": 5,
+	    "paddingLeft": 20,
+	    "paddingRight": 20,
+	    "borderBottomWidth": 1,
+	    "borderStyle": "solid",
+	    "borderColor": "#999999"
+	  },
+	  "title": {
+	    "fontSize": 32,
+	    "paddingTop": 5,
+	    "paddingBottom": 5,
+	    "color": "#333333"
+	  },
+	  "info": {
+	    "flexDirection": "row",
+	    "justifyContent": "flex-start",
+	    "alignItems": "stretch"
+	  },
+	  "txt": {
+	    "fontSize": 28,
+	    "paddingTop": 5,
+	    "paddingBottom": 5,
+	    "color": "#999999"
+	  },
+	  "status-1": {
+	    "color": "#009900"
+	  },
+	  "status-2": {
+	    "color": "#ff0000"
+	  }
+	})
+	})
+	;__weex_bootstrap__("@weex-component/f4a0c85ea1322e4548e66b57251b0cc3", {
+	  "transformerVersion": "0.3.1"
+	},undefined)
+
+/***/ },
+/* 1 */
+/***/ function(module, exports) {
+
+	;__weex_define__("@weex-component/we-dropdown", [], function(__weex_require__, __weex_exports__, __weex_module__){
+
+	;
+	    var animation = __weex_require__('@weex-module/animation');
+
+	    __weex_module__.exports = {
+	        data: function () {return {
+	            test:'gqgrqqqg',
+	            tops:'-361',
+	            currentid:'',
+	            current_showMask:'',
+	            current_translate:'',
+	            current_opacity:'',
+	            statusId:'0',
+	            statusIda: '0',
+	            statusIdb: '0',
+	            statusIdc: '0', 
+	            status: [
+	                
+	            ],
+	            status1:[
+	                {id: '0', name: '全部'},
+	                {id: '1', name: '待审核'},
+	                {id: '2', name: '进行中'},
+	                {id: '3', name: '已完成'},
+	                {id: '4', name: '已结束'}
+	            ],
+	            status2:[
+	                {id: '0', name: '全部'},
+	                {id: '1', name: '本月'},
+	                {id: '2', name: '近三个月'},
+	                {id: '3', name: '近半年'},
+	                {id: '4', name: '近一年'}
+	            ],
+	            status3:[
+	                {id: '0', name: '全部'},
+	                {id: '1', name: '我的'},
+	                {id: '2', name: '其他'}
+	            ],
+	            flagSrc: 'https://gw.alicdn.com/tps/TB11a2lKFXXXXbVXpXXXXXXXXXX-32-32.png',
+	            arrowSrc: 'https://gw.alicdn.com/tps/TB1O3_aKFXXXXXdXVXXXXXXXXXX-27-23.png'
+	        }},
+	        computed: {
+	            statusName1: {
+	                get: function(){
+	                    var id = this.statusIda;
+	                    if (id==0) {
+	                        return "状态";
+	                    }else{
+	                        return this.status1.filter(function(s){
+	                        return s.id == id
+	                      })[0].name;
+	                    }
+	                    
+	                }
+	            },
+	            statusName2: {
+	                get: function(){
+	                    var id = this.statusIdb;
+	                    if (id==0) {
+	                        return "月份";
+	                    }else{
+	                        return this.status2.filter(function(s){
+	                            return s.id == id
+	                        })[0].name;
+	                    }
+	                }
+	            },
+	            statusName3: {
+	                get: function(){
+	                    var id = this.statusIdc;
+	                    if (id==0) {
+	                        return "责任人";
+	                    }else{
+	                        return this.status3.filter(function(s){
+	                        return s.id == id
+	                      })[0].name;
+	                    }
+	                    
+	                }
+	            }
+	        },
+	        methods: {
+	            clicktab1:function() {
+	                
+	                if (this.currentid!=1) {
+	                    this.current_translate=null;
+	                    this.current_opacity=null;
+	                    this.current_showMask=null;
+	                }
+	                this.collapse(this._ids.options.el.ref);
+	                this.test='111';
+	                this.tops='-361';
+	                this.status=this.status1;
+	                this.statusId=this.statusIda;
+	                this.currentid=1;             
+	                // this.switchView(); 
+	                this.rotate(this._ids.arrow1.el.ref);
+	                this.toggleMaskVisible();
+
+	                this.opacity(this._ids.mask.el.ref);
+	            },
+	            clicktab2:function(argument) {
+	                if (this.currentid!=2) {
+	                    this.current_translate=null;
+	                    this.current_opacity=null;
+	                    this.current_showMask=null;
+	                }
+	                this.collapse(this._ids.options.el.ref);
+	                this.test='222';
+	                this.tops='-361';
+	                this.status=this.status2;
+	                this.statusId=this.statusIdb;  
+	                this.currentid=2;             
+	                // this.switchView(); 
+	                this.rotate(this._ids.arrow2.el.ref);
+	                this.toggleMaskVisible();
+
+	                this.opacity(this._ids.mask.el.ref);
+	            },
+	            clicktab3:function(argument) {
+	                if (this.currentid!=3) {
+	                    this.current_translate=null;
+	                    this.current_opacity=null;
+	                    this.current_showMask=null;
+	                }
+	                this.collapse(this._ids.options.el.ref);
+	                this.test='333';
+	                this.tops='-181';
+	                this.status=this.status3; 
+	                this.statusId=this.statusIdc; 
+	                this.currentid=3;             
+	                // this.switchView(); 
+	                this.rotate(this._ids.arrow3.el.ref);
+	                this.toggleMaskVisible();
+
+	                this.opacity(this._ids.mask.el.ref);
+	            },
+
+	            switchView: function(curid) { 
+	                this.toggleMaskVisible();
+
+	                this.opacity(this._ids.mask.el.ref);
+	                this.collapse(this._ids.options.el.ref);
+
+	                if (curid==1) {
+	                    this.rotate(this._ids.arrow1.el.ref);
+	                }else if (curid==2) {
+	                    this.rotate(this._ids.arrow2.el.ref);
+	                }else{
+	                    this.rotate(this._ids.arrow3.el.ref);
+	                }
+	                
+
+	            },
+
+	            onItemClick: function(e) {
+	                var vid = e.target.attr.vid;
+	                switch(this.currentid){
+	                    case 1:
+	                       this.statusIda = vid;
+	                       break;
+	                    case 2:
+	                       this.statusIdb = vid;
+	                       break;
+	                    case 3:
+	                       this.statusIdc = vid;
+	                       break; 
+	                    default:
+	                       break;        
+	                }
+	                // this.updateStatus(vid);
+	                this.switchView(this.currentid);
+	                this.$dispatch('statuschange', {
+	                    id1: this.statusIda,
+	                    name1: this.statusName1,
+	                    id2: this.statusIdb,
+	                    name2: this.statusName2,
+	                    id3: this.statusIdc,
+	                    name3: this.statusName3
+	                })
+	            },
+
+	            updateStatus: function(id) { 
+	                this.statusId = id; 
+	            },
+
+	            toggleMaskVisible: function(){
+	                this.current_showMask = !this.current_showMask;
+	                var visibility = this.current_showMask? 'visible': 'hidden';
+	                this._ids.mask.el.setClassStyle({visibility:visibility});
+	            },
+
+	            collapse: function(ref, callback) {
+	                var platform = this.$getConfig().env.platform;
+	                var translate = 'translate(0, 100%)'; // Web need % ;
+	                if(platform == 'iOS') {
+	                    translate = 'translate(0, 270)'; // ios bug && fixing
+	                }
+	                this.current_translate = this.current_translate ? '' : translate;
+	                this.anim(ref, {
+	                  transform: this.current_translate
+	                }, 'ease', 100, callback);
+	            },
+
+	            opacity: function(ref, callback) {
+	                var self = this;
+	                self.current_opacity = self.current_opacity === 1 ? 0.1 : 1;
+	                self.anim(ref, {
+	                    opacity: self.current_opacity
+	                }, 'ease', 100, callback);
+	            },
+
+	            rotate: function(ref, callback) {
+	                var self = this;
+	                if(!self.current_rotate) {
+	                    self.current_rotate = 0;
+	                }
+	                self.current_rotate = self.current_rotate + 180;
+	                self.anim(ref, {
+	                    transform: 'rotate(' + self.current_rotate + 'deg)'
+	                }, 'linear', 100, callback);
+	            },
+
+	            anim: function(ref, styles, timingFunction, duration, callback) {
+	                animation.transition(ref, {
+	                  styles: styles,
+	                  timingFunction: timingFunction,
+	                  duration: duration
+	                }, callback || function(){});
+	            }
+	        }
+	    }
+
+	;__weex_module__.exports.template = __weex_module__.exports.template || {}
+	;Object.assign(__weex_module__.exports.template, {
+	  "type": "div",
+	  "classList": [
+	    "select-container"
+	  ],
+	  "children": [
+	    {
+	      "type": "div",
+	      "classList": [
+	        "content"
+	      ],
+	      "children": [
+	        {
+	          "type": "content"
+	        }
+	      ]
+	    },
+	    {
+	      "type": "div",
+	      "classList": [
+	        "mask"
+	      ],
+	      "id": "mask",
+	      "events": {
+	        "click": "switchView"
+	      }
+	    },
+	    {
+	      "type": "div",
+	      "classList": [
+	        "options"
+	      ],
+	      "id": "options",
+	      "style": {
+	        "top": function () {return this.tops}
+	      },
+	      "children": [
+	        {
+	          "type": "div",
+	          "repeat": function () {return this.status},
+	          "classList": [
+	            "cell"
+	          ],
+	          "attr": {
+	            "vid": function () {return this.id},
+	            "trackBy": function () {return this.$index}
+	          },
+	          "events": {
+	            "click": "onItemClick"
+	          },
+	          "children": [
+	            {
+	              "type": "text",
+	              "classList": function () {return ['name', this.id==this.statusId?'current':'']},
+	              "attr": {
+	                "value": function () {return this.name}
+	              }
+	            },
+	            {
+	              "type": "image",
+	              "classList": [
+	                "icon-curr-flag"
+	              ],
+	              "attr": {
+	                "src": function () {return this.flagSrc}
+	              },
+	              "shown": function () {return this.id==this.statusId}
+	            }
+	          ]
+	        }
+	      ]
+	    },
+	    {
+	      "type": "div",
+	      "classList": [
+	        "select"
+	      ],
+	      "children": [
+	        {
+	          "type": "div",
+	          "classList": [
+	            "oneselect"
+	          ],
+	          "events": {
+	            "click": "clicktab1"
+	          },
+	          "children": [
+	            {
+	              "type": "text",
+	              "classList": [
+	                "current-text"
+	              ],
+	              "attr": {
+	                "value": function () {return this.statusName1}
+	              }
+	            },
+	            {
+	              "type": "image",
+	              "classList": [
+	                "icon-arrow"
+	              ],
+	              "id": "arrow1",
+	              "attr": {
+	                "src": function () {return this.arrowSrc}
+	              }
+	            }
+	          ]
+	        },
+	        {
+	          "type": "div",
+	          "classList": [
+	            "oneselect"
+	          ],
+	          "events": {
+	            "click": "clicktab2"
+	          },
+	          "children": [
+	            {
+	              "type": "text",
+	              "classList": [
+	                "current-text"
+	              ],
+	              "attr": {
+	                "value": function () {return this.statusName2}
+	              }
+	            },
+	            {
+	              "type": "image",
+	              "classList": [
+	                "icon-arrow"
+	              ],
+	              "id": "arrow2",
+	              "attr": {
+	                "src": function () {return this.arrowSrc}
+	              }
+	            }
+	          ]
+	        },
+	        {
+	          "type": "div",
+	          "classList": [
+	            "oneselect"
+	          ],
+	          "events": {
+	            "click": "clicktab3"
+	          },
+	          "children": [
+	            {
+	              "type": "text",
+	              "classList": [
+	                "current-text"
+	              ],
+	              "attr": {
+	                "value": function () {return this.statusName3}
+	              }
+	            },
+	            {
+	              "type": "image",
+	              "classList": [
+	                "icon-arrow"
+	              ],
+	              "id": "arrow3",
+	              "attr": {
+	                "src": function () {return this.arrowSrc}
+	              }
+	            }
+	          ]
+	        }
+	      ]
+	    }
+	  ]
+	})
+	;__weex_module__.exports.style = __weex_module__.exports.style || {}
+	;Object.assign(__weex_module__.exports.style, {
+	  "select-container": {
+	    "flexDirection": "column",
+	    "position": "relative",
+	    "zIndex": 1000
+	  },
+	  "content": {
+	    "width": 750,
+	    "marginTop": 90
+	  },
+	  "mask": {
+	    "position": "absolute",
+	    "top": 0,
+	    "left": 0,
+	    "bottom": 0,
+	    "right": 0,
+	    "flex": 1,
+	    "width": 750,
+	    "backgroundColor": "rgba(0,0,0,0.5)",
+	    "visibility": "hidden"
+	  },
+	  "select": {
+	    "width": 750,
+	    "height": 90,
+	    "flexDirection": "row",
+	    "alignItems": "center",
+	    "borderBottomWidth": 1,
+	    "borderStyle": "solid",
+	    "borderColor": "#dddddd",
+	    "backgroundColor": "#eeeeee",
+	    "zIndex": 1001,
+	    "position": "absolute",
+	    "top": 0
+	  },
+	  "oneselect": {
+	    "flex": 1,
+	    "flexDirection": "row",
+	    "alignItems": "center",
+	    "paddingLeft": 30,
+	    "paddingRight": 30,
+	    "textAlign": "center",
+	    "borderRightWidth": 1,
+	    "borderColor": "#dddddd",
+	    "height": 90
+	  },
+	  "current-text": {
+	    "color": "#333333",
+	    "fontSize": 33,
+	    "flex": 1
+	  },
+	  "icon-arrow": {
+	    "width": 27,
+	    "height": 23
+	  },
+	  "options": {
+	    "position": "absolute",
+	    "width": 750,
+	    "backgroundColor": "#ffffff",
+	    "transformOrigin": "center center"
+	  },
+	  "cell": {
+	    "flexDirection": "row",
+	    "justifyContent": "space-between",
+	    "alignItems": "center",
+	    "width": 750,
+	    "height": 90,
+	    "paddingLeft": 30,
+	    "paddingRight": 30,
+	    "borderBottomWidth": 1,
+	    "borderStyle": "solid",
+	    "borderColor": "#dddddd"
+	  },
+	  "name": {
+	    "color": "#333333",
+	    "fontSize": 33,
+	    "flex": 1
+	  },
+	  "icon-curr-flag": {
+	    "width": 32,
+	    "height": 32
+	  },
+	  "current": {
+	    "color": "#0088FB"
+	  }
+	})
+	})
+
+/***/ }
+/******/ ]);

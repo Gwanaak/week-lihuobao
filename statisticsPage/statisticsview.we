@@ -1,0 +1,272 @@
+<template>
+ <div style="background-color:white;width:750;">
+  <list class="list">
+    <!-- <refresh  class="refresh" onRefresh="handleRefresh" display="{{displayRefresh}}">
+        <loading-indicator style="width:100;height:100;color:grey;"></loading-indicator>
+        <text style="margin-left:10;color:black;">{{refreshstr}}</text>
+    </refresh> -->
+	<cell>
+	  <div  class="tabview">
+	   <div class="tableftbutton" style="background-color:{{leftbackcolor}};" onclick="clicklefttab">
+		<text style="color:{{lefttitlecolor}};font-size: 27;">选项分析</text>
+	   </div>
+	   <div class="tabrightbutton" style="background-color:{{rightbackcolor}};" onclick="clickrighttab">
+		<text style="color:{{righttitlecolor}};font-size: 27;">考试排名</text>
+	   </div>	
+	  </div>
+	</cell>
+	<cell class="tab1" if="showtab1">
+		<div class="kindtitle">
+			<text class="kindlabel">关键指标</text>
+			<text style="color: grey;font-size: 25;">实时数据 2016.09.08</text>
+		</div>
+		<div  class="detailview">
+			<div  class="detaillabel">
+				<text class="kindlabel">费用消耗</text>
+				<text class="numberlabel">933</text>
+			</div>
+			<div class="detaillabel">
+				<text class="kindlabel">参与人数</text>
+				<text class="numberlabel">287</text>
+			</div>
+			<div class="detaillabel">
+				<text class="kindlabel">奖励人数</text>
+				<text class="numberlabel">87</text>
+			</div>
+			<div class="detaillabel">
+				<text class="kindlabel">正确率</text>
+				<text class="numberlabel">38.23%</text>
+			</div>
+		</div>
+		<div style="margin-top:20;">
+			<text style="padding-left: 40;font-size:28;">选项分析</text>
+		</div>
+		<div  class="answerview" repeat="{{row in rows}}">
+		    <text style="color:grey;font-size:27;margin-top:12;">{{row.title}}</text>
+		    <div class="answerlabel">
+				<text style="color:grey;font-size:27;">选项1:{{row.answer1}}</text>
+				<text style="color: grey;font-size: 25;">{{row.accuracy1}}</text>
+		    </div>
+		    <div class="answerlabel">
+				<text style="color:rgb(248,207,52);font-size:27;">选项2:{{row.answer2}}</text>
+				<text style="color: grey;font-size: 25;">{{row.accuracy2}}</text>
+		    </div>
+		    <div class="answerlabel">
+				<text style="color:grey;font-size:27;">选项3:{{row.answer3}}</text>
+				<text style="color: grey;font-size: 25;">{{row.accuracy3}}</text>
+		    </div>
+	    </div>
+	</cell> 
+    <cell class="tab2" if="showtab2">
+		<div class="kindtitle">
+			<text class="kindlabel">考试排名</text>
+			<text style="color: grey;font-size: 25;">实时数据 2016.09.08</text>
+		</div>
+	    <div style="flex-direction:row;padding:40;">
+	    	<text class="label">名次</text>
+	    	<text class="label">姓名</text>
+	    	<text class="label">奖励</text>
+	    	<text class="label">分数</text>
+	    	<text class="label">用时</text>
+	    	<text class="label">连锁</text>
+	    </div>
+	    <div class="ranking" repeat="{{rankingrow in rankingrows}}">
+	      <div class="labelrow">
+	    	<text class="label1">{{rankingrow.number}}</text>
+	    	<text class="label1">{{rankingrow.name}}</text>
+	    	<text class="label1">{{rankingrow.money}}</text>
+	    	<text class="label1">{{rankingrow.scores}}</text>
+	    	<text class="label1">{{rankingrow.times}}</text>
+	    	<text class="label1">{{rankingrow.area}}</text>
+	      </div>	
+	    </div>
+	</cell> 
+  </list>	   
+ </div>
+</template>
+
+<style>
+	.refresh {
+	    display: flex;
+	    align-items: center;
+	    justify-content: center;
+	    flex-direction:row;
+	    width:750;
+	    height:100;
+	 }
+	.tabview{
+		flex-direction:row;
+		margin:40;
+		border-color:lightgrey;
+		border-width:1;
+		border-radius:16;
+		align-items:center;
+		justify-content:center;
+	}
+	.tableftbutton{
+		flex:1;
+		align-items:center;
+		padding-top:10;
+		padding-bottom:10;
+		border-radius:16;
+	}
+	.tabrightbutton{
+		flex:1;
+		align-items:center;
+		padding-top:10;
+		padding-bottom:10;
+		border-radius:16;
+	}
+	.detailview{
+		flex-direction:row;
+		padding-left: 40;
+		padding-right: 40;
+		padding-top: 40;
+		padding-bottom:30;
+		justify-content:space-between;
+		border-bottom-width: 12;
+		border-color: rgb(243,243,243);
+	}
+	.detaillabel{
+		flex-direction:column;
+		/*text-align: center;*/
+		align-items:center;
+	}
+	.numberlabel{
+		margin:12;
+		color: rgb(248,207,52);
+		font-size: 25;
+	}
+	.answerview{
+		flex-direction:column;
+		padding-left:40;
+		padding-right:40;
+		justify-content:space-between;
+		border-bottom-width:16;
+		border-color:rgb(243,243,243);
+		padding-top:20;
+		padding-bottom:30;
+	}
+	.answerlabel{
+		flex-direction:row;
+		justify-content:space-between;
+		align-items:center;
+		margin-top:24;
+	}
+	.kindtitle{
+		flex-direction:row;
+		justify-content:space-between;
+		padding-left: 40;
+		padding-right: 40;
+	}
+	.ranking{
+		background-color:rgb(240,240,240);
+		border-bottom-width:10;
+		border-color:white;
+	}
+	.labelrow{
+		flex-direction:row;
+		padding-left:40;
+		padding-right:40;
+		padding-top:12;
+		padding-bottom:12;
+		align-items:center;
+	}
+	.label{
+		flex:1;
+		text-align:center;
+		font-size:26;
+	}
+	.label1{
+		flex:1;
+		text-align:center;
+		font-size:24;
+	}
+	.kindlabel{
+		font-size:27;
+	}
+
+
+
+</style>
+
+<script>
+  module.exports = {
+    ready:function(){
+
+      
+    },
+    data: {
+       leftbackcolor:'rgb(248,207,52)',
+       rightbackcolor:'white',
+       lefttitlecolor:'white',
+       righttitlecolor:'grey',
+       showtab1:true,
+       showtab2:false,
+       // displayRefresh: 'show',
+       // refreshstr:'下拉刷新',
+       rows:[
+          {title:'题目题目题目题目题目题目题目题目题目',answer1:'题目题目题目题目题目题目',answer2:'题目题目题目题目题目题目',answer3:'题目题目题目题目题目题目',accuracy1:'38.23%',accuracy2:'38.23%',accuracy3:'38.23%'},
+          {title:'题目题目题目题目题目题目题目题目题目',answer1:'题目题目题目题目题目题目',answer2:'题目题目题目题目题目题目',answer3:'题目题目题目题目题目题目',accuracy1:'38.23%',accuracy2:'38.23%',accuracy3:'38.23%'},
+          {title:'题目题目题目题目题目题目题目题目题目',answer1:'题目题目题目题目题目题目',answer2:'题目题目题目题目题目题目',answer3:'题目题目题目题目题目题目',accuracy1:'38.23%',accuracy2:'38.23%',accuracy3:'38.23%'},
+          {title:'题目题目题目题目题目题目题目题目题目',answer1:'题目题目题目题目题目题目',answer2:'题目题目题目题目题目题目',answer3:'题目题目题目题目题目题目',accuracy1:'38.23%',accuracy2:'38.23%',accuracy3:'38.23%'},
+          {title:'题目题目题目题目题目题目题目题目题目',answer1:'题目题目题目题目题目题目',answer2:'题目题目题目题目题目题目',answer3:'题目题目题目题目题目题目',accuracy1:'38.23%',accuracy2:'38.23%',accuracy3:'38.23%'}
+       ],
+       rankingrows:[
+          {number:'第一名',name:'杨阳',money:'30元',scores:'98',times:'69秒',area:'大参林'},
+          {number:'第一名',name:'杨阳',money:'30元',scores:'98',times:'69秒',area:'大参林'},
+          {number:'第一名',name:'杨阳',money:'30元',scores:'98',times:'69秒',area:'大参林'},
+          {number:'第一名',name:'杨阳',money:'30元',scores:'98',times:'69秒',area:'大参林'},
+          {number:'第一名',name:'杨阳',money:'30元',scores:'98',times:'69秒',area:'大参林'},
+          {number:'第一名',name:'杨阳',money:'30元',scores:'98',times:'69秒',area:'大参林'},
+          {number:'第一名',name:'杨阳',money:'30元',scores:'98',times:'69秒',area:'大参林'},
+          {number:'第一名',name:'杨阳',money:'30元',scores:'98',times:'69秒',area:'大参林'},
+          {number:'第一名',name:'杨阳',money:'30元',scores:'98',times:'69秒',area:'大参林'},
+          {number:'第一名',name:'杨阳',money:'30元',scores:'98',times:'69秒',area:'大参林'},
+          {number:'第一名',name:'杨阳',money:'30元',scores:'98',times:'69秒',area:'大参林'},
+          {number:'第一名',name:'杨阳',money:'30元',scores:'98',times:'69秒',area:'大参林'},
+          {number:'第一名',name:'杨阳',money:'30元',scores:'98',times:'69秒',area:'大参林'},
+          {number:'第一名',name:'杨阳',money:'30元',scores:'98',times:'69秒',area:'大参林'},
+          {number:'第一名',name:'杨阳',money:'30元',scores:'98',times:'69秒',area:'大参林'},
+          {number:'第一名',name:'杨阳',money:'30元',scores:'98',times:'69秒',area:'大参林'},
+          {number:'第一名',name:'杨阳',money:'30元',scores:'98',times:'69秒',area:'大参林'},
+          {number:'第一名',name:'杨阳',money:'30元',scores:'98',times:'69秒',area:'大参林'},
+          {number:'第一名',name:'杨阳',money:'30元',scores:'98',times:'69秒',area:'大参林'},
+          {number:'第一名',name:'杨阳',money:'30元',scores:'98',times:'69秒',area:'大参林'},
+          {number:'第一名',name:'杨阳',money:'30元',scores:'98',times:'69秒',area:'大参林'},
+          {number:'第一名',name:'杨阳',money:'30元',scores:'98',times:'69秒',area:'大参林'}
+       ]
+
+
+      },
+      methods:{
+             
+             clicklefttab:function(){
+
+                 this.leftbackcolor='rgb(248,207,52)';
+                 this.rightbackcolor='white';
+                 this.lefttitlecolor='white';
+                 this.righttitlecolor='grey';
+                 this.showtab1=true;
+                 this.showtab2=false;
+             },
+             clickrighttab:function() {
+             	 
+             	 this.rightbackcolor='rgb(248,207,52)';
+                 this.leftbackcolor='white';
+                 this.righttitlecolor='white';
+                 this.lefttitlecolor='grey';
+                 this.showtab1=false;
+                 this.showtab2=true;
+             },
+           //   handleRefresh: function (e) {
+           //     var self = this;
+           //     self.displayRefresh = 'show';
+           //     self.refreshstr='正在刷新';
+               
+           //     //self.requestHomeDatas();
+
+           // }
+         }
+  }
+</script>

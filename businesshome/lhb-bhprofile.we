@@ -1,0 +1,116 @@
+<template>
+ <div>
+	<jwy-groupbutton groupiconurl="http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/buiness_gaikuang_logo.png" grouptitle="概况" style="border-bottom-width:1;border-bottom-color:lightgrey;"></jwy-groupbutton>
+	<div style="flex-direction:column;border-bottom-width:10;border-bottom-color:rgb(237,237,237);padding-bottom:10;">
+		<div style="flex-direction:row;">
+		  <div class="label">
+		  	 <text style="color:grey;font-size: 28;">费用合计</text>
+		  	 <text class="numberlabel">{{getcost(dict.cost)}}</text>
+		  </div>
+		  <div class="label">
+		  	 <text style="color:grey;font-size: 28;">参与人数</text>
+		  	 <text class="numberlabel">{{dict.participants}}</text>
+		  </div>
+		</div>
+		<div style="flex-direction:row;margin-top:10;">
+		  <div class="label">
+		  	 <text style="color:grey;font-size: 28;">完成人数</text>
+		  	 <text class="numberlabel">{{dict.pass}}</text>
+		  </div>
+		  <div class="label">
+		  	 <text style="color:grey;font-size: 28;">完成比例</text>
+		  	 <text class="numberlabel">{{getpassrate(dict.pass,dict.unpass)}}</text>
+		  </div>
+		</div>
+	</div>
+
+ </div>
+
+
+</template>
+
+<style>
+   .label{
+   	flex-direction:column;
+   	flex:1;
+   	align-items:center;
+   	padding-top: 17;
+   }
+   .numberlabel{
+   	margin-top: 10;
+   	color: orange;
+   	font-size: 28;
+   }	
+
+
+</style>
+
+<script>
+	
+	require("../userhome/jwy-groupbutton.we");
+	var eventModule = require('@weex-module/requestevent'); 
+  var stream = require('@weex-module/stream');
+
+  //var version = '134';
+
+    module.exports={
+        data:{
+            dict:{}
+        },
+
+        ready:function(){
+        var self = this;
+        eventModule.getHomeDatas(function(ret){ 
+
+          var GET_URL_homeSummary = 'http://1525sg4410.51mypc.cn/api.php?i=App&m=getOrgHomeSummary';//开发环境
+          //var GET_URL_homeSummary = 'http://xiaomingtiyan.imwork.net/api.php?i=App&m=getOrgHomeSummary';//体验环境
+          //var GET_URL_homeSummary = 'http://ming.lihuobao.cn/api.php?i=App&m=getOrgHomeSummary';//正式环境
+          
+          var BODY_URL='user_id='+ret.uid+'&'+'sid='+ret.sid+'&'+'_t='+ret._t+'&platform_id=2&version='+ret.version+'&container_id='+ret.container_id;
+    
+          stream.fetch({
+            method: 'POST',
+            url: GET_URL_homeSummary,
+            body:BODY_URL,
+            type:'json'
+          }, function(ret) {
+            if(!ret.ok){
+              
+            }else{
+              
+               var dict = ret.data;
+               self.dict=dict;
+
+              // console.log('get:'+JSON.stringify(ret.data));
+              
+            }
+          },function(response){
+              //console.log('get:'+'failed');
+          });
+          });
+      },
+      methods:{
+             
+             getpassrate:function(pass,unpass){
+                
+                var passrate='0%';
+                if (pass==0) {
+
+                }else{
+                	var num= pass/(pass+unpass)*100.0;
+                	passrate= num.toFixed(2) + '%';
+                }
+
+                return passrate;
+             },
+             getcost:function(cost){
+
+                return cost/100.0;
+             }
+             
+     }
+
+    }
+
+
+</script>

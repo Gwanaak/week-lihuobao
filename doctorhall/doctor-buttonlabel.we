@@ -1,0 +1,25 @@
+<template>
+	<div class="group">
+      <image style="margin-left:20;width:30;height:30;"src="{{groupiconurl}}"></image>
+   	  <text style="font-size:30;color:{{fontcolor}};margin-left:10;">{{grouptitle}}</text>
+    </div>
+</template>
+
+<style>
+	.group{
+		flex-direction:row;
+		align-items:center;
+		margin-top:15;
+		padding-bottom:15;
+	}
+</style>
+
+<script>
+	module.exports={
+      data:{
+         groupiconurl:'',
+         grouptitle:'',
+         fontcolor:'grey'
+     }
+  }
+</script>

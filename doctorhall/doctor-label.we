@@ -1,0 +1,26 @@
+<template>
+	<div class="imglabel">
+      <image style="margin-left:20;width:26;height:26;"src="{{imgurl}}"></image>
+   	  <text style="font-size:26;color:{{fontcolor}};margin-left:10;margin-right:20;">{{labeltitle}}</text>
+    </div>
+</template>
+
+<style>
+	.imglabel{
+    height: 40;
+		flex-direction:row;
+		align-items:center;
+    background-color: rgb(125,125,125);
+    border-radius: 20;
+	}
+</style>
+
+<script>
+	module.exports={
+      data:{
+         imgurl:'',
+         labeltitle:'',
+         fontcolor:'grey'
+     }
+  }
+</script>

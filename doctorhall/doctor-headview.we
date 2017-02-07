@@ -1,0 +1,69 @@
+<template>
+  <div class="otherkind" style="flex-direction:row;">
+      <div class="otherkindborder" repeat="{{btn in buttons}}" style="width:{{getnumber(buttons)}}">
+       <doctor-button class="othersmallkind" iconurl="{{btn.iconurl}}" icontitle="{{btn.icontitle}}" btndict="{{btn}}" btnradius="40" btnwidth="80"></doctor-button>
+      </div>
+  </div>
+</template>
+
+<style>
+  .otherkind{
+    margin-top: 20;
+    padding-bottom:20;
+    flex-direction: row;
+    width: 750;
+    flex-wrap:wrap;
+    border-bottom-width: 2;
+    border-color: rgb(237,237,237);
+  }
+  .otherkindborder{
+    /*flex:1; */
+    flex-direction:column;
+    padding-bottom: 16;
+    /*border-width: 0.8;*/
+    /*border-bottom-width: 8;*/
+    /*border-top-width: 0;*/
+    /*border-color: rgb(237,237,237);*/
+  }
+  .othersmallkind{
+    flex:1; 
+    margin-top:8;
+  }
+</style>
+
+<script>
+  require("./doctor-button.we");
+
+    module.exports={
+        data:{
+          environment:'',
+            buttons:[
+            {iconurl:'http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/doc_ganmaoIcon.png',icontitle:'感冒疾病',tag:0,smallType:'11011'},
+            {iconurl:'http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/doc_pifuIcon.png',icontitle:'皮肤疾病',tag:1,smallType:'11012'},
+            {iconurl:'http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/doc_manxingIcon.png',icontitle:'慢性疾病',tag:2,smallType:'11013'},
+            {iconurl:'http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/doc_ertongIcon.png',icontitle:'儿童疾病',tag:3,smallType:'11014'},
+            {iconurl:'http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/doc_fukeIcon.png',icontitle:'妇科疾病',tag:4,smallType:'11015'},
+            {iconurl:'http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/doc_wuguanIcon.png',icontitle:'五官疾病',tag:5,smallType:'11016'},
+            {iconurl:'http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/doc_xiaohuaIcon.png',icontitle:'消化疾病',tag:6,smallType:'11017'},
+            {iconurl:'http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/doc_moreIcon.png',icontitle:'我的课程',tag:7,smallType:'7'}
+            ]
+        },
+        ready:function(){
+        
+      },
+      methods:{
+             
+             getnumber:function(buttons){
+             
+               if (buttons.length<4) {
+                return 250;
+               }else{
+                return 187.5;
+               }
+             
+             }
+             
+     }
+
+    }
+</script>

@@ -1,0 +1,147 @@
+<template>
+<div style="background-color:white;width:750;">
+ <list class="list">
+  <refresh  class="refresh" onRefresh="handleRefresh" display="{{displayRefresh}}">
+        <loading-indicator style="width:70;height:70;color:grey;"></loading-indicator>
+        <text style="margin-left:10;color:black;">{{refreshstr}}</text>
+  </refresh>
+  <cell class="header" style=";background-color:white">
+    <doctor-headview></doctor-headview>
+  </cell>
+  <cell if="{{show}}">
+    <doctor-buttonlabel groupiconurl="http://testossimg.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/doctors_Icon.png" grouptitle="精品课程"></doctor-buttonlabel>
+  </cell>
+  <cell onappear="onappear" ondisappear="ondisappear" class="cell" repeat="{{row in rows}}" onclick="clcikmanagecell(row)">
+    <doctor-cell row="{{row}}"  environment="{{environment}}"></doctor-cell>
+  </cell>
+  <cell if="{{shownew}}">
+    <doctor-buttonlabel groupiconurl="http://mingstatic.oss-cn-hangzhou.aliyuncs.com/weex/ios/Image/doc_icon2.png" grouptitle="最新课程"></doctor-buttonlabel>
+  </cell>
+  <cell onappear="onappear" ondisappear="ondisappear" class="cell" repeat="{{row in newrows}}" onclick="clcikmanagecell(row)">
+    <doctor-cell row="{{row}}"  environment="{{environment}}"></doctor-cell>
+  </cell>
+
+  <!-- <cell>
+    <text style="font-size:{{size}};color:lightgrey;text-align:center;">{{test}}</text>
+  </cell> -->
+  </list>
+ </div> 
+</template>
+<style>
+  .cell{
+    width: 750;
+  }
+  .refresh {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction:row;
+    width:750;
+    height:70;
+  }
+</style>
+<script>
+  require("./doctor-buttonlabel.we");
+  require("./doctor-headview.we");
+  require("./doctor-cell.we");
+
+  var eventModule = require('@weex-module/requestevent'); 
+  var clickModule = require('@weex-module/doctorclickevent');
+  var stream = require('@weex-module/stream');
+
+
+  module.exports = {
+    creat:function(){
+       
+    },
+
+    ready:function(){
+
+      this.requestHomeDatas();
+  },
+    data: {
+      test:'',
+      environment:'',
+      displayRefresh: 'show',
+      refreshstr:'下拉刷新',
+      rows:[],
+      newrows:[],
+      size:27,
+      show:'true',
+      shownew:'true'
+      },
+
+    methods: {
+         requestHomeDatas:function(){
+
+           var self = this;
+           eventModule.getHomeDatas(function(ret){ 
+
+            // nativeLog("ret:--------"+ret.uid+ret.sid+ret._t);
+            self.environment=ret.environment;
+            var GET_URL_List = ret.main_url+'getCourseHomeList';
+            var BODY_URL='user_id='+ret.uid+'&sid='+ret.sid+'&_t='+ret._t+'&platform_id='+ret.platform+'&version='+ret.version+'&container_id='+ret.container_id+'&categorylevel1_id=15&categorylevel2_id=0&categorylevel3_id=0';
+
+            stream.fetch({
+              method: 'POST',
+              url: GET_URL_List,
+              body:BODY_URL,
+              type:'json'
+            }, function(ret) {
+              if(!ret.ok){
+                //self.test = "request failed";
+              }else{
+                //console.log('get:'+JSON.stringify(ret.data));
+                var dic =ret.data;
+                //self.test='get:'+JSON.stringify(ret.data);
+                var array= dic.tasks;
+
+                self.classification(array);
+
+                self.displayRefresh = 'hide';
+                self.refreshstr='下拉刷新';
+              }
+            },function(response){
+              //进度
+            });
+
+              });
+         },
+
+         handleRefresh: function (e) {
+             var self = this;
+             self.displayRefresh = 'show';
+             self.refreshstr='正在刷新';
+             self.rows=[];
+             self.newrows=[];
+             self.requestHomeDatas();
+
+           },
+
+         clcikmanagecell:function(e){
+             
+             clickModule.didClickCell(e);
+
+         },
+         classification:function(arr){
+             var self = this;
+             for (var i = 0; i < arr.length; i++) {
+                var dict=arr[i];
+                if (dict.is_recommend) {
+                  self.rows.push(dict);
+                }else{
+                  self.newrows.push(dict);
+                }
+             }
+             //self.test=JSON.stringify(self.newrows);
+             if (self.rows.length==0) {
+               self.show='false';
+             }
+             if (self.newrows.length==0) {
+               self.shownew='false';
+             }
+         }
+
+        }
+  }
+</script>
